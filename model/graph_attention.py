@@ -114,6 +114,7 @@ class AdaptiveGraphAttentionLayer(nn.Module):
         e = e.masked_fill(mask, float("-inf"))
 
         attention = F.softmax(e, dim=2)  # normalize over source nodes j, per target i
+        attention = self.dropout(attention)
 
         # Weighted aggregation: out_i = sum_j attention_ij * h_j, per head.
         out = torch.einsum("nijh,njhd->nihd", attention, h)
