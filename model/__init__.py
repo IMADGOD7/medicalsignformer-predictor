@@ -14,7 +14,7 @@ from .classifier import ClassificationHead
 from .monte_carlo import enable_mc_dropout, mc_dropout_predict
 
 __all__ = [
-    "MedicalSignFormer",
+    "MedicalSignFormerV2",
     "AdaptiveGraphAttentionNetwork",
     "GraphBranch",
     "FaceEncoder",

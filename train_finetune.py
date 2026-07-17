@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score
 
 import config
-from model.medicalsignformer_v2 import MedicalSignFormerV2
+from model.medicalsignformer import MedicalSignFormerV2
 from dataset.dataloader import get_dataloaders
 
 ROOT = Path(__file__).parent
