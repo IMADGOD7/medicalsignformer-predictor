@@ -1,4 +1,4 @@
-# MedicalSignFormerV2
+# MedicalSignFormer
 
 A Transformer-State Space based framework for **Medical Sign Language Recognition** using **MediaPipe Holistic landmarks**, **Adaptive Graph Attention Networks**, **Motion Feature Fusion**, **Graph-aware Masked Temporal Pretraining**, **Mamba Temporal Encoder**, **Temporal Attention Pooling**, and **Monte Carlo Dropout Uncertainty Estimation**.
 
@@ -103,7 +103,7 @@ MedicalSignFormerV2/
 ## 1. Clone Repository
 
 ```bash
-git clone https://github.com/<username>/medicalsignformer-predictor.git
+git clone https://github.com/IMADGOD7/medicalsignformer-predictor.git
 
 cd MedicalSignFormerV2
 ```
@@ -356,4 +356,4 @@ This project is released under the MIT License.
 
 Computer Science & Engineering
 
-MedicalSignFormerV2 Research Project
+MedicalSignFormer Research Project
