@@ -1,0 +1,699 @@
+filepath,disease,signer,label
+landmarks/Diabetes/rinki/RINKI_24.npy,Diabetes,rinki,17
+landmarks/SORE THROAT/harkhapratim gogoi/HARKAPRATIM_12.npy,SORE THROAT,harkhapratim gogoi,37
+landmarks/HEAT BURN/chayanika/CHAYANIKA_ 15.npy,HEAT BURN,chayanika,25
+landmarks/Dizziness/Rinki/Rinki__Rinki__Rinki_9.npy,Dizziness,rinki,18
+landmarks/Ear Ache/Kalyan/Kalyan__Kalyan__KALYAN_36.npy,Ear Ache,kalyan,19
+landmarks/JAUNDICE/AKASH/AKASH__AKASH__AKASH_29.npy,JAUNDICE,akash,30
+landmarks/Sneeze/Junali/Junali__Junali__WIN_20250602_11_51_47_Pro.npy,Sneeze,junali,40
+landmarks/Ear Ache/Kalyan/Kalyan__Kalyan__KALYAN_15.npy,Ear Ache,kalyan,19
+landmarks/TB/Naresh/Naresh__Naresh__NARESH_39.npy,TB,naresh,44
+landmarks/BRUISE/prakash/PRAKASH_8.npy,BRUISE,prakash,4
+landmarks/MUMPSE/AKASH/AKASH__AKASH__AKASH_3.npy,MUMPSE,akash,31
+landmarks/TB/harkhapratim gogoi/HARKHAPRATIM_26.npy,TB,harkhapratim gogoi,44
+landmarks/STOMACH ACHE/pranati/PRANATI_25.npy,STOMACH ACHE,pranati,39
+landmarks/MUMPSE/SURESH/SURESH__SURESH__SURESH_8.npy,MUMPSE,suresh,31
+landmarks/CONJUCTIVITIES/SURESH/SURESH__SURESH__SURESH_13.npy,CONJUCTIVITIES,suresh,10
+landmarks/Allergies/Biraj/Biraj__Biraj__BIRAJ_21.npy,Allergies,biraj,1
+landmarks/Back Ache/Anindita/Anindita__Anindita__Anindita_16.npy,Back Ache,anindita,5
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_23.npy,Ear Ache,umiraj,19
+landmarks/BROKEN BONES/arinjit kataki/ARINJIT_10.npy,BROKEN BONES,arinjit kataki,3
+landmarks/Faint/rupanjali/RUPANJALI_3.npy,Faint,rupanjali,21
+landmarks/Cramp/Anindita/Anindita__Anindita__Anindita_11.npy,Cramp,anindita,14
+landmarks/Cramp/Rinki/Rinki__Rinki__Rinki_6.npy,Cramp,rinki,14
+landmarks/Faint/rajkumar/RAJKUMAR_10.npy,Faint,rajkumar,21
+landmarks/Retching/rinki/RINKI_3.npy,Retching,rinki,35
+landmarks/Cut/Bishal/Bishal__Bishal__BISHAL_11.npy,Cut,bishal,15
+landmarks/Itch/rajkumar/RAJKUMAR_10.npy,Itch,rajkumar,29
+landmarks/Tooth ache/Junali/Junali__Junali__WIN_20250602_11_46_39_Pro.npy,Tooth ache,junali,45
+landmarks/STOMACH ACHE/chayanika/CHAYANIKA_38.npy,STOMACH ACHE,chayanika,39
+landmarks/CONJUCTIVITIES/SURESH/SURESH__SURESH__SURESH_7.npy,CONJUCTIVITIES,suresh,10
+landmarks/Hiv/rajkumar/RAJKUMAR_41.npy,Hiv,rajkumar,27
+landmarks/BLOOD PRESSURE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_13.npy,BLOOD PRESSURE,arinjit kataki,2
+landmarks/Retching/rupanjali/RUPANJALI_12.npy,Retching,rupanjali,35
+landmarks/Rash/Shubham/Shubham__Shubham__SHUBHAM_13.npy,Rash,shubham,34
+landmarks/Cut/Bishal/Bishal__Bishal__BISHAL_12.npy,Cut,bishal,15
+landmarks/Bone Fracture/rinki/RINKI_26.npy,Bone Fracture,rinki,7
+landmarks/Tooth ache/anindita/Anindita_6.npy,Tooth ache,anindita,45
+landmarks/Vomit/Biraj/Biraj__Biraj__BIRAJ_14.npy,Vomit,biraj,46
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_23.npy,Sneeze,rinki,40
+landmarks/BLOOD PRESSURE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_10.npy,BLOOD PRESSURE,arinjit kataki,2
+landmarks/FLU/chayanika/CHAYANIKA_22.npy,FLU,chayanika,20
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_5.npy,DIARRHOEA,arinjit kataki,16
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_27.npy,DIARRHOEA,arinjit kataki,16
+landmarks/nausea/rinki/RINKI_30.npy,nausea,rinki,47
+landmarks/Bleed/junali/JUNALI_20.npy,Bleed,junali,6
+landmarks/Dizziness/anindita/Anindita_10.npy,Dizziness,anindita,18
+landmarks/SORE THROAT/prakash/PRAKASH_13.npy,SORE THROAT,prakash,37
+landmarks/SHOULDER PAIN/arinjit kataki/ARINJIT_19.npy,SHOULDER PAIN,arinjit kataki,36
+landmarks/Hiv/rinki/RINKI_19.npy,Hiv,rinki,27
+landmarks/HEAD ACHE/arinjit kataki/ARINJIT_16.npy,HEAD ACHE,arinjit kataki,23
+landmarks/HEAD ACHE/chayanika/CHAYANIKA_4.npy,HEAD ACHE,chayanika,23
+landmarks/HEART ATTACK/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_18.npy,HEART ATTACK,arinjit kataki,24
+landmarks/CONJUCTIVITIES/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_22.npy,CONJUCTIVITIES,arinjit kataki,10
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_26.npy,Sneeze,rinki,40
+landmarks/DIARRHOEA/harkhapratim gogoi/HARKHAPRATIM_14.npy,DIARRHOEA,harkhapratim gogoi,16
+landmarks/SHOULDER PAIN/harkhapratim gogoi/HARKAPRATIM_3.npy,SHOULDER PAIN,harkhapratim gogoi,36
+landmarks/Cough/Bishal/Bishal__Bishal__BISHAL_26.npy,Cough,bishal,13
+landmarks/Bleed/rinki/RINKI_7.npy,Bleed,rinki,6
+landmarks/JAUNDICE/AKASH/AKASH__AKASH__AKASH_23.npy,JAUNDICE,akash,30
+landmarks/JAUNDICE/AKASH/AKASH__AKASH__AKASH_24.npy,JAUNDICE,akash,30
+landmarks/Fever/Rinki/Rinki__Rinki__Rinki_15.npy,Fever,rinki,22
+landmarks/Tooth ache/anindita/WIN_20250602_12_12_30_Pro.npy,Tooth ache,anindita,45
+landmarks/CONJUCTIVITIES/NARESH/NARESH__NARESH__NARESH_4.npy,CONJUCTIVITIES,naresh,10
+landmarks/nausea/rupanjali/RUPANJALI_13.npy,nausea,rupanjali,47
+landmarks/HEPATITIS/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_1.npy,HEPATITIS,arinjit kataki,26
+landmarks/FLU/harkhapratim gogoi/HARKAPRATIM_9.npy,FLU,harkhapratim gogoi,20
+landmarks/MUMPSE/AKASH/AKASH__AKASH__AKASH_10.npy,MUMPSE,akash,31
+landmarks/Faint/rupanjali/RUPANJALI_22.npy,Faint,rupanjali,21
+landmarks/Hiv/rajkumar/RAJKUMAR_34.npy,Hiv,rajkumar,27
+landmarks/Bleed/rajkumar/RAJKUMAR_23.npy,Bleed,rajkumar,6
+landmarks/STD/AKASH/AKASH__AKASH__AKASH_50.npy,STD,akash,38
+landmarks/CHICKEN POX/AKASH/AKASH__AKASH__AKASH_4.npy,CHICKEN POX,akash,9
+landmarks/Bone Fracture/anindita/ANINDITA_8.npy,Bone Fracture,anindita,7
+landmarks/Swell/Rinki/Rinki__Rinki__Rinki_23.npy,Swell,rinki,43
+landmarks/BRUISE/harkhapratim gogoi/HARKAPRATIM_6.npy,BRUISE,harkhapratim gogoi,4
+landmarks/SHOULDER PAIN/arinjit kataki/ARINJIT_18.npy,SHOULDER PAIN,arinjit kataki,36
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_9.npy,BROKEN BONES,chayanika,3
+landmarks/CHICKEN POX/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_10.npy,CHICKEN POX,arinjit kataki,9
+landmarks/Cough/Biraj/Biraj__Biraj__BIRAJ_30.npy,Cough,biraj,13
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_7.npy,STD,naresh,38
+landmarks/ASTHMA/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_2.npy,ASTHMA,harkhapratim gogoi,0
+landmarks/MUMPSE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_37.npy,MUMPSE,arinjit kataki,31
+landmarks/Measles/anindita/ANINDITA_9.npy,Measles,anindita,32
+landmarks/Sneeze/Anindita/Anindita__Anindita__WIN_20250602_12_20_33_Pro.npy,Sneeze,anindita,40
+landmarks/Injury/Biraj/Biraj__Biraj__BIRAJ_7.npy,Injury,biraj,28
+landmarks/Broken Arm/Umiraj/Umiraj__Umiraj__UMIRAJ_24.npy,Broken Arm,umiraj,8
+landmarks/Back Ache/Anindita/Anindita__Anindita__Anindita_15.npy,Back Ache,anindita,5
+landmarks/ASTHMA/AKASH/AKASH__AKASH__AKASH_5.npy,ASTHMA,akash,0
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_48.mp4.npy,Sunburn,kalyan,42
+landmarks/Sore Finger/Junali/Junali__Junali__Junali_15.npy,Sore Finger,junali,41
+landmarks/Tooth ache/Junali/Junali__Junali__WIN_20250602_11_45_49_Pro.npy,Tooth ache,junali,45
+landmarks/Injury/Biraj/Biraj__Biraj__BIRAJ_34.npy,Injury,biraj,28
+landmarks/Cough/Umiraj/Umiraj__Umiraj__UMIRAJ_20.npy,Cough,umiraj,13
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_8.npy,BROKEN BONES,chayanika,3
+landmarks/Cold/Biraj/Biraj__Biraj__BIRAJ_11.npy,Cold,biraj,12
+landmarks/nausea/junali/JUNALI_5.npy,nausea,junali,47
+landmarks/Faint/rinki/RINKI_13.npy,Faint,rinki,21
+landmarks/Back Ache/Junali/Junali__Junali__Junali_4.npy,Back Ache,junali,5
+landmarks/SHOULDER PAIN/chayanika/CHAYANIKA_3.npy,SHOULDER PAIN,chayanika,36
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_4.npy,Ear Ache,umiraj,19
+landmarks/Cough/Biraj/Biraj__Biraj__BIRAJ_33.npy,Cough,biraj,13
+landmarks/BLOOD PRESSURE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_3.npy,BLOOD PRESSURE,harkhapratim gogoi,2
+landmarks/Vomit/Umiraj/Umiraj__Umiraj__UMIRAJ_14.npy,Vomit,umiraj,46
+landmarks/RUNNY NOSE/prakash/PRAKASH_13.npy,RUNNY NOSE,prakash,33
+landmarks/Back Ache/Rinki/Rinki__Rinki__Rinki_14.npy,Back Ache,rinki,5
+landmarks/RUNNY NOSE/arinjit kataki/ARINJIT_24.npy,RUNNY NOSE,arinjit kataki,33
+landmarks/SORE THROAT/pranati/PRANATI_11.npy,SORE THROAT,pranati,37
+landmarks/Sunburn/Bishal/Bishal__Bishal__BISHAL_7.npy,Sunburn,bishal,42
+landmarks/Rash/Kalyan/Kalyan__Kalyan__KALYAN_13.npy,Rash,kalyan,34
+landmarks/SHOULDER PAIN/pranati/PRANATI_6.npy,SHOULDER PAIN,pranati,36
+landmarks/CHICKEN POX/NARESH/NARESH__NARESH__NARESH_30.npy,CHICKEN POX,naresh,9
+landmarks/Sore Finger/Junali/Junali__Junali__WIN_20250602_11_50_53_Pro.npy,Sore Finger,junali,41
+landmarks/Faint/rinki/RINKI_14.npy,Faint,rinki,21
+landmarks/Cut/Biraj/Biraj__Biraj__BIRAJ_27.npy,Cut,biraj,15
+landmarks/Itch/anindita/ANINDITA_20.npy,Itch,anindita,29
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_15.npy,Broken Arm,kalyan,8
+landmarks/Measles/rinki/RINKI_11.npy,Measles,rinki,32
+landmarks/Tooth ache/Rinki/Rinki__Rinki__Rinki_6.npy,Tooth ache,rinki,45
+landmarks/Cancer/rinki/RINKI_34.npy,Cancer,rinki,11
+landmarks/Dizziness/anindita/WIN_20250602_12_14_59_Pro.npy,Dizziness,anindita,18
+landmarks/Bleed/rajkumar/RAJKUMAR_35.npy,Bleed,rajkumar,6
+landmarks/Cough/Biraj/Biraj__Biraj__BIRAJ_22.npy,Cough,biraj,13
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_28.npy,Sneeze,rinki,40
+landmarks/TB/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_19.npy,TB,arinjit kataki,44
+landmarks/MUMPSE/NARESH/NARESH__NARESH__NARESH_24.npy,MUMPSE,naresh,31
+landmarks/DIARRHOEA/harkhapratim gogoi/HARKHAPRATIM_13.npy,DIARRHOEA,harkhapratim gogoi,16
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_4.npy,Broken Arm,kalyan,8
+landmarks/SORE THROAT/arinjit kataki/ARINJIT_28.npy,SORE THROAT,arinjit kataki,37
+landmarks/HEAT BURN/prakash/PRAKASH_30.npy,HEAT BURN,prakash,25
+landmarks/JAUNDICE/NARESH/NARESH__NARESH__NARESH_17.npy,JAUNDICE,naresh,30
+landmarks/Tooth ache/anindita/WIN_20250602_12_10_54_Pro.npy,Tooth ache,anindita,45
+landmarks/Fever/Junali/Junali__Junali__WIN_20250602_12_09_02_Pro.npy,Fever,junali,22
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_45.mp4.npy,Sunburn,kalyan,42
+landmarks/Allergies/Kalyan/Kalyan__Kalyan__KALYAN_32.npy,Allergies,kalyan,1
+landmarks/Fever/Rinki/Rinki__Rinki__Rinki_32.npy,Fever,rinki,22
+landmarks/Cough/Bishal/Bishal__Bishal__BISHAL_21.npy,Cough,bishal,13
+landmarks/CHICKEN POX/AKASH/AKASH__AKASH__AKASH_10.npy,CHICKEN POX,akash,9
+landmarks/MUMPSE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM41.npy,MUMPSE,harkhapratim gogoi,31
+landmarks/HEAD ACHE/prakash/PRAKASH_21.npy,HEAD ACHE,prakash,23
+landmarks/STOMACH ACHE/prakash/PRAKASH_17.npy,STOMACH ACHE,prakash,39
+landmarks/Hiv/junali/JUNALI_2.npy,Hiv,junali,27
+landmarks/Back Ache/Rinki/Rinki__Rinki__WIN_20250602_12_33_31_Pro.npy,Back Ache,rinki,5
+landmarks/Swell/Rinki/Rinki__Rinki__Rinki_11.npy,Swell,rinki,43
+landmarks/FLU/pranati/PRANATI_6.npy,FLU,pranati,20
+landmarks/STOMACH ACHE/arinjit kataki/ARINJIT_38.npy,STOMACH ACHE,arinjit kataki,39
+landmarks/Itch/rupanjali/RUPANJALI_9.npy,Itch,rupanjali,29
+landmarks/Vomit/Shubham/Shubham__Shubham__SHUBHAM_15.npy,Vomit,shubham,46
+landmarks/Retching/rupanjali/RUPANJALI_22.npy,Retching,rupanjali,35
+landmarks/CHICKEN POX/SURESH/SURESH__SURESH__SURESH_2.npy,CHICKEN POX,suresh,9
+landmarks/STOMACH ACHE/arinjit kataki/ARINJIT_22.npy,STOMACH ACHE,arinjit kataki,39
+landmarks/HEAD ACHE/chayanika/CHAYANIKA_7.npy,HEAD ACHE,chayanika,23
+landmarks/Cold/Kalyan/Kalyan__Kalyan__KALYAN_38.npy,Cold,kalyan,12
+landmarks/Dizziness/Junali/Junali__Junali__Junali_3.npy,Dizziness,junali,18
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_15.npy,STD,harkhapratim gogoi,38
+landmarks/Bone Fracture/rinki/RINKI_20.npy,Bone Fracture,rinki,7
+landmarks/Dizziness/Rinki/Rinki__Rinki__WIN_20250602_12_36_00_Pro.npy,Dizziness,rinki,18
+landmarks/Measles/rupanjali/RUPANJALI_6.npy,Measles,rupanjali,32
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_30.npy,CONJUCTIVITIES,akash,10
+landmarks/STOMACH ACHE/prakash/PRAKASH_28.npy,STOMACH ACHE,prakash,39
+landmarks/Faint/rupanjali/RUPANJALI_18.npy,Faint,rupanjali,21
+landmarks/BROKEN BONES/prakash/PRAKASH_41.npy,BROKEN BONES,prakash,3
+landmarks/Cancer/rajkumar/RAJKUMAR_20.npy,Cancer,rajkumar,11
+landmarks/Sneeze/Anindita/Anindita__Anindita__Anindita_17.npy,Sneeze,anindita,40
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_39.npy,JAUNDICE,arinjit kataki,30
+landmarks/Vomit/Bishal/Bishal__Bishal__BISHAL_21.npy,Vomit,bishal,46
+landmarks/Swell/Rinki/Rinki__Rinki__Rinki_21.npy,Swell,rinki,43
+landmarks/Bone Fracture/rupanjali/RUPANJALI_26.npy,Bone Fracture,rupanjali,7
+landmarks/HEPATITIS/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_3.npy,HEPATITIS,harkhapratim gogoi,26
+landmarks/Diabetes/junali/JUNALI_1.npy,Diabetes,junali,17
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_39.npy,STD,naresh,38
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_35.npy,STD,naresh,38
+landmarks/Swell/Junali/Junali__Junali__Junali_11.npy,Swell,junali,43
+landmarks/BRUISE/chayanika/CHAYANIKA_12.npy,BRUISE,chayanika,4
+landmarks/JAUNDICE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_5.npy,JAUNDICE,harkhapratim gogoi,30
+landmarks/BRUISE/arinjit kataki/ARINJIT_2.npy,BRUISE,arinjit kataki,4
+landmarks/HEART ATTACK/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_23.npy,HEART ATTACK,harkhapratim gogoi,24
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_35.npy,CONJUCTIVITIES,akash,10
+landmarks/Cold/Umiraj/Umiraj__Umiraj__UMIRAJ_8.npy,Cold,umiraj,12
+landmarks/Bone Fracture/rinki/RINKI_11.npy,Bone Fracture,rinki,7
+landmarks/Tooth ache/Junali/Junali__Junali__Junali_6.npy,Tooth ache,junali,45
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_57_54_Pro.npy,Fever,rinki,22
+landmarks/DIARRHOEA/harkhapratim gogoi/HARKHAPRATIM_25.npy,DIARRHOEA,harkhapratim gogoi,16
+landmarks/Itch/anindita/ANINDITA_38.npy,Itch,anindita,29
+landmarks/Measles/rinki/RINKI_25.npy,Measles,rinki,32
+landmarks/STOMACH ACHE/arinjit kataki/ARINJIT_46.npy,STOMACH ACHE,arinjit kataki,39
+landmarks/SORE THROAT/prakash/PRAKASH_23.npy,SORE THROAT,prakash,37
+landmarks/Bleed/rinki/RINKI_8.npy,Bleed,rinki,6
+landmarks/Fever/Junali/Junali__Junali__Junali_10.npy,Fever,junali,22
+landmarks/Allergies/Biraj/Biraj__Biraj__BIRAJ_17.npy,Allergies,biraj,1
+landmarks/Fever/Junali/Junali__Junali__WIN_20250602_12_08_36_Pro.npy,Fever,junali,22
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_44.npy,STD,naresh,38
+landmarks/Cut/Bishal/Bishal__Bishal__BISHAL_19.npy,Cut,bishal,15
+landmarks/FLU/chayanika/CHAYANIKA_9.npy,FLU,chayanika,20
+landmarks/Sneeze/Anindita/Anindita__Anindita__Anindita_29.npy,Sneeze,anindita,40
+landmarks/Dizziness/Rinki/Rinki__Rinki__WIN_20250602_12_33_59_Pro.npy,Dizziness,rinki,18
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_4.npy,STD,harkhapratim gogoi,38
+landmarks/HEAD ACHE/harkhapratim gogoi/HARKAPRATIM_14.npy,HEAD ACHE,harkhapratim gogoi,23
+landmarks/STOMACH ACHE/arinjit kataki/ARINJIT_12.npy,STOMACH ACHE,arinjit kataki,39
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_1.npy,STD,naresh,38
+landmarks/CONJUCTIVITIES/NARESH/NARESH__NARESH__NARESH_30.npy,CONJUCTIVITIES,naresh,10
+landmarks/Tooth ache/anindita/WIN_20250602_12_11_44_Pro.npy,Tooth ache,anindita,45
+landmarks/nausea/rupanjali/RUPANJALI_15.npy,nausea,rupanjali,47
+landmarks/CHICKEN POX/AKASH/AKASH__AKASH__AKASH_5.npy,CHICKEN POX,akash,9
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_24.npy,Broken Arm,kalyan,8
+landmarks/MUMPSE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM24.npy,MUMPSE,harkhapratim gogoi,31
+landmarks/Fever/Rinki/Rinki__Rinki__Rinki_24.npy,Fever,rinki,22
+landmarks/SORE THROAT/prakash/PRAKASH_10.npy,SORE THROAT,prakash,37
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_24.npy,Ear Ache,umiraj,19
+landmarks/Retching/rinki/RINKI_17.npy,Retching,rinki,35
+landmarks/STD/SURESH/SURESH__SURESH__SURESH_5.npy,STD,suresh,38
+landmarks/TB/Akash/Akash__Akash__AKASH_32.npy,TB,akash,44
+landmarks/HEART ATTACK/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_30.npy,HEART ATTACK,arinjit kataki,24
+landmarks/MUMPSE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_27.npy,MUMPSE,arinjit kataki,31
+landmarks/Injury/Bishal/Bishal__Bishal__BISHAL_19.npy,Injury,bishal,28
+landmarks/Vomit/Biraj/Biraj__Biraj__BIRAJ_12.npy,Vomit,biraj,46
+landmarks/Diabetes/rajkumar/RAJKUMAR_12.npy,Diabetes,rajkumar,17
+landmarks/nausea/rupanjali/RUPANJALI_24.npy,nausea,rupanjali,47
+landmarks/ASTHMA/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_2.npy,ASTHMA,arinjit kataki,0
+landmarks/HEAT BURN/prakash/PRAKASH_14.npy,HEAT BURN,prakash,25
+landmarks/TB/harkhapratim gogoi/HARKHAPRATIM_20.npy,TB,harkhapratim gogoi,44
+landmarks/RUNNY NOSE/pranati/PRANATI_18.npy,RUNNY NOSE,pranati,33
+landmarks/Fever/anindita/WIN_20250602_12_27_30_Pro.npy,Fever,anindita,22
+landmarks/Retching/rinki/RINKI_15.npy,Retching,rinki,35
+landmarks/Cut/Biraj/Biraj__Biraj__BIRAJ_4.npy,Cut,biraj,15
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_34.npy,Broken Arm,kalyan,8
+landmarks/BRUISE/arinjit kataki/ARINJIT_12.npy,BRUISE,arinjit kataki,4
+landmarks/Swell/Junali/Junali__Junali__WIN_20250602_11_58_21_Pro.npy,Swell,junali,43
+landmarks/CHICKEN POX/AKASH/AKASH__AKASH__AKASH_15.npy,CHICKEN POX,akash,9
+landmarks/Broken Arm/Umiraj/Umiraj__Umiraj__UMIRAJ_7.npy,Broken Arm,umiraj,8
+landmarks/HEPATITIS/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_6.npy,HEPATITIS,arinjit kataki,26
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_7.npy,CONJUCTIVITIES,akash,10
+landmarks/CHICKEN POX/SURESH/SURESH__SURESH__SURESH_3.npy,CHICKEN POX,suresh,9
+landmarks/Sore Finger/Anindita/Anindita__Anindita__WIN_20250602_12_18_41_Pro.npy,Sore Finger,anindita,41
+landmarks/MUMPSE/AKASH/AKASH__AKASH__AKASH_8.npy,MUMPSE,akash,31
+landmarks/JAUNDICE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_29.npy,JAUNDICE,harkhapratim gogoi,30
+landmarks/HEAT BURN/arinjit kataki/ARINJIT_ 9.npy,HEAT BURN,arinjit kataki,25
+landmarks/Cramp/Rinki/Rinki__Rinki__Rinki_8.npy,Cramp,rinki,14
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_17.npy,Broken Arm,kalyan,8
+landmarks/Cancer/anindita/ANINDITA_3.npy,Cancer,anindita,11
+landmarks/TB/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_35.npy,TB,arinjit kataki,44
+landmarks/Broken Arm/Bishal/Bishal__Bishal__BISHAL_5.npy,Broken Arm,bishal,8
+landmarks/Injury/Shubham/Shubham__Shubham__SHUBHAM_9.npy,Injury,shubham,28
+landmarks/Dizziness/Rinki/Rinki__Rinki__WIN_20250602_12_34_52_Pro.npy,Dizziness,rinki,18
+landmarks/Injury/Biraj/Biraj__Biraj__BIRAJ_22.npy,Injury,biraj,28
+landmarks/Retching/rajkumar/RAJKUMAR_29.npy,Retching,rajkumar,35
+landmarks/Vomit/Kalyan/Kalyan__Kalyan__KALYAN_43.npy,Vomit,kalyan,46
+landmarks/STOMACH ACHE/pranati/PRANATI_18.npy,STOMACH ACHE,pranati,39
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_22.npy,DIARRHOEA,arinjit kataki,16
+landmarks/ASTHMA/NARESH/NARESH__NARESH__NARESH_19.npy,ASTHMA,naresh,0
+landmarks/Bone Fracture/anindita/ANINDITA_22.npy,Bone Fracture,anindita,7
+landmarks/HEAT BURN/pranati/PRANATI_26.npy,HEAT BURN,pranati,25
+landmarks/SHOULDER PAIN/pranati/PRANATI_13.npy,SHOULDER PAIN,pranati,36
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_3.npy,JAUNDICE,arinjit kataki,30
+landmarks/Cramp/Junali/Junali__Junali__WIN_20250602_12_05_56_Pro.npy,Cramp,junali,14
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_35.mp4.npy,Sunburn,kalyan,42
+landmarks/Tooth ache/Rinki/Rinki__Rinki__Rinki_10.npy,Tooth ache,rinki,45
+landmarks/RUNNY NOSE/pranati/PRANATI_21.npy,RUNNY NOSE,pranati,33
+landmarks/Sore Finger/Rinki/Rinki__Rinki__Rinki_26.npy,Sore Finger,rinki,41
+landmarks/Bleed/rupanjali/RUPANJALI_14.npy,Bleed,rupanjali,6
+landmarks/RUNNY NOSE/harkhapratim gogoi/HARKAPRATIM_9.npy,RUNNY NOSE,harkhapratim gogoi,33
+landmarks/HEPATITIS/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_17.npy,HEPATITIS,arinjit kataki,26
+landmarks/Bleed/rupanjali/RUPANJALI_21.npy,Bleed,rupanjali,6
+landmarks/BROKEN BONES/prakash/PRAKASH_23.npy,BROKEN BONES,prakash,3
+landmarks/Bleed/junali/JUNALI_1.npy,Bleed,junali,6
+landmarks/Cough/Kalyan/Kalyan__Kalyan__KALYAN_16.npy,Cough,kalyan,13
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_4.npy,Sneeze,rinki,40
+landmarks/nausea/rinki/RINKI_2.npy,nausea,rinki,47
+landmarks/TB/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_12.npy,TB,arinjit kataki,44
+landmarks/Sneeze/Rajkumar/Rajkumar__Rajkumar__WIN_20250602_11_13_31_Pro.npy,Sneeze,rajkumar,40
+landmarks/BLOOD PRESSURE/NARESH/NARESH__NARESH__NARESH_23.npy,BLOOD PRESSURE,naresh,2
+landmarks/FLU/harkhapratim gogoi/HARKAPRATIM_22.npy,FLU,harkhapratim gogoi,20
+landmarks/Bone Fracture/rajkumar/RAJKUMAR_5.npy,Bone Fracture,rajkumar,7
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_14.npy,Ear Ache,umiraj,19
+landmarks/Cut/Bishal/Bishal__Bishal__BISHAL_31.npy,Cut,bishal,15
+landmarks/Cut/Kalyan/Kalyan__Kalyan__KALYAN_11.npy,Cut,kalyan,15
+landmarks/Back Ache/Rinki/Rinki__Rinki__Rinki_12.npy,Back Ache,rinki,5
+landmarks/Faint/rajkumar/RAJKUMAR_9.npy,Faint,rajkumar,21
+landmarks/CHICKEN POX/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_22.npy,CHICKEN POX,arinjit kataki,9
+landmarks/Cut/Biraj/Biraj__Biraj__BIRAJ_32.npy,Cut,biraj,15
+landmarks/Cold/Biraj/Biraj__Biraj__BIRAJ_13.npy,Cold,biraj,12
+landmarks/RUNNY NOSE/chayanika/CHAYANIKA_9.npy,RUNNY NOSE,chayanika,33
+landmarks/DIARRHOEA/Naresh/Naresh__Naresh__NARESH_12.npy,DIARRHOEA,naresh,16
+landmarks/HEPATITIS/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_7.npy,HEPATITIS,harkhapratim gogoi,26
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_2.npy,Sneeze,rinki,40
+landmarks/Sore Finger/Anindita/Anindita__Anindita__WIN_20250602_12_19_21_Pro.npy,Sore Finger,anindita,41
+landmarks/Sore Finger/Rinki/Rinki__Rinki__Rinki_11.npy,Sore Finger,rinki,41
+landmarks/SORE THROAT/pranati/PRANATI_22.npy,SORE THROAT,pranati,37
+landmarks/SORE THROAT/pranati/PRANATI_9.npy,SORE THROAT,pranati,37
+landmarks/Hiv/junali/JUNALI_14.npy,Hiv,junali,27
+landmarks/BLOOD PRESSURE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_11.npy,BLOOD PRESSURE,arinjit kataki,2
+landmarks/Itch/anindita/ANINDITA_17.npy,Itch,anindita,29
+landmarks/Cramp/Junali/Junali__Junali__WIN_20250602_12_02_39_Pro.npy,Cramp,junali,14
+landmarks/BRUISE/prakash/PRAKASH_4.npy,BRUISE,prakash,4
+landmarks/Cold/Bishal/Bishal__Bishal__BISHAL_8.npy,Cold,bishal,12
+landmarks/MUMPSE/NARESH/NARESH__NARESH__NARESH_20.npy,MUMPSE,naresh,31
+landmarks/Rash/Biraj/Biraj__Biraj__BIRAJ_3.npy,Rash,biraj,34
+landmarks/ASTHMA/AKASH/AKASH__AKASH__AKASH_11.npy,ASTHMA,akash,0
+landmarks/Bone Fracture/rupanjali/RUPANJALI_8.npy,Bone Fracture,rupanjali,7
+landmarks/Rash/Kalyan/Kalyan__Kalyan__KALYAN_4.npy,Rash,kalyan,34
+landmarks/HEPATITIS/AKASH/AKASH__AKASH__AKASH_23.npy,HEPATITIS,akash,26
+landmarks/Bleed/rajkumar/RAJKUMAR_45.npy,Bleed,rajkumar,6
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_58_02_Pro.npy,Fever,rinki,22
+landmarks/Cut/Shubham/Shubham__Shubham__SHUBHAM_3.npy,Cut,shubham,15
+landmarks/SHOULDER PAIN/chayanika/CHAYANIKA_7.npy,SHOULDER PAIN,chayanika,36
+landmarks/STOMACH ACHE/harkhapratim gogoi/HARKAPRATIM_15.npy,STOMACH ACHE,harkhapratim gogoi,39
+landmarks/Injury/Kalyan/Kalyan__Kalyan__KALYAN_45.npy,Injury,kalyan,28
+landmarks/FLU/prakash/PRAKASH_24.npy,FLU,prakash,20
+landmarks/FLU/arinjit kataki/ARINJIT_11.npy,FLU,arinjit kataki,20
+landmarks/Swell/anindita/Anindita_9.npy,Swell,anindita,43
+landmarks/Cold/Bishal/Bishal__Bishal__BISHAL_33.npy,Cold,bishal,12
+landmarks/Allergies/Biraj/Biraj__Biraj__BIRAJ_1.npy,Allergies,biraj,1
+landmarks/HEART ATTACK/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_38.npy,HEART ATTACK,harkhapratim gogoi,24
+landmarks/Ear Ache/Bishal/Bishal__Bishal__BISHAL_30.npy,Ear Ache,bishal,19
+landmarks/STOMACH ACHE/harkhapratim gogoi/HARKAPRATIM_8.npy,STOMACH ACHE,harkhapratim gogoi,39
+landmarks/JAUNDICE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_30.npy,JAUNDICE,harkhapratim gogoi,30
+landmarks/MUMPSE/NARESH/NARESH__NARESH__NARESH_11.npy,MUMPSE,naresh,31
+landmarks/Faint/rajkumar/RAJKUMAR_32.npy,Faint,rajkumar,21
+landmarks/Allergies/Shubham/Shubham__Shubham__SHUBHAM_16.npy,Allergies,shubham,1
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_30.npy,JAUNDICE,arinjit kataki,30
+landmarks/Diabetes/anindita/ANINDITA_11.npy,Diabetes,anindita,17
+landmarks/RUNNY NOSE/pranati/PRANATI_22.npy,RUNNY NOSE,pranati,33
+landmarks/nausea/rinki/RINKI_1.npy,nausea,rinki,47
+landmarks/TB/Naresh/Naresh__Naresh__NARESH_13.npy,TB,naresh,44
+landmarks/Bleed/rinki/RINKI_3.npy,Bleed,rinki,6
+landmarks/HEART ATTACK/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_10.npy,HEART ATTACK,harkhapratim gogoi,24
+landmarks/Vomit/Kalyan/Kalyan__Kalyan__KALYAN_58.npy,Vomit,kalyan,46
+landmarks/Sore Finger/Rinki/Rinki__Rinki__Rinki_34.npy,Sore Finger,rinki,41
+landmarks/Bleed/anindita/ANINDITA_14.npy,Bleed,anindita,6
+landmarks/Cancer/anindita/ANINDITA_15.npy,Cancer,anindita,11
+landmarks/HEAD ACHE/pranati/PRANATI_4.npy,HEAD ACHE,pranati,23
+landmarks/Ear Ache/Shubham/Shubham__Shubham__SHUBHAM_16.npy,Ear Ache,shubham,19
+landmarks/Measles/rinki/RINKI_32.npy,Measles,rinki,32
+landmarks/Retching/rajkumar/RAJKUMAR_7.npy,Retching,rajkumar,35
+landmarks/ASTHMA/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_9.npy,ASTHMA,arinjit kataki,0
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__HARKHAPRATIM_16.npy,JAUNDICE,arinjit kataki,30
+landmarks/Measles/rupanjali/RUPANJALI_5.npy,Measles,rupanjali,32
+landmarks/BLOOD PRESSURE/AKASH/AKASH__AKASH__AKASH_3.npy,BLOOD PRESSURE,akash,2
+landmarks/BRUISE/pranati/PRANATI_8.npy,BRUISE,pranati,4
+landmarks/Bleed/rupanjali/RUPANJALI_10.npy,Bleed,rupanjali,6
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_19.npy,CONJUCTIVITIES,akash,10
+landmarks/BLOOD PRESSURE/SURESH/SURESH__SURESH__SURESH_9.npy,BLOOD PRESSURE,suresh,2
+landmarks/RUNNY NOSE/arinjit kataki/ARINJIT_20.npy,RUNNY NOSE,arinjit kataki,33
+landmarks/Itch/anindita/ANINDITA_33.npy,Itch,anindita,29
+landmarks/Rash/Umiraj/Umiraj__Umiraj__UMIRAJ_14.npy,Rash,umiraj,34
+landmarks/Measles/rupanjali/RUPANJALI_1.npy,Measles,rupanjali,32
+landmarks/Cold/Bishal/Bishal__Bishal__BISHAL_11.npy,Cold,bishal,12
+landmarks/Cut/Umiraj/Umiraj__Umiraj__UMIRAJ_8.npy,Cut,umiraj,15
+landmarks/FLU/arinjit kataki/ARINJIT_12.npy,FLU,arinjit kataki,20
+landmarks/Cold/Shubham/Shubham__Shubham__SHUBHAM_6.npy,Cold,shubham,12
+landmarks/HEAT BURN/chayanika/CHAYANIKA_ 3.npy,HEAT BURN,chayanika,25
+landmarks/Ear Ache/Bishal/Bishal__Bishal__BISHAL_40.npy,Ear Ache,bishal,19
+landmarks/Fever/Junali/Junali__Junali__WIN_20250602_12_08_57_Pro.npy,Fever,junali,22
+landmarks/Cut/Umiraj/Umiraj__Umiraj__UMIRAJ_13.npy,Cut,umiraj,15
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_12.mp4.npy,Sunburn,kalyan,42
+landmarks/Allergies/Biraj/Biraj__Biraj__BIRAJ_13.npy,Allergies,biraj,1
+landmarks/Cramp/Rinki/Rinki__Rinki__Rinki_5.npy,Cramp,rinki,14
+landmarks/Measles/anindita/ANINDITA_1.npy,Measles,anindita,32
+landmarks/Rash/Shubham/Shubham__Shubham__SHUBHAM_16.npy,Rash,shubham,34
+landmarks/Cramp/Junali/Junali__Junali__WIN_20250602_12_06_11_Pro.npy,Cramp,junali,14
+landmarks/DIARRHOEA/Akash/Akash__Akash__AKASH_7.npy,DIARRHOEA,akash,16
+landmarks/STD/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_48.npy,STD,arinjit kataki,38
+landmarks/Diabetes/junali/JUNALI_10.npy,Diabetes,junali,17
+landmarks/HEAT BURN/pranati/PRANATI_16.npy,HEAT BURN,pranati,25
+landmarks/Cramp/Junali/Junali__Junali__WIN_20250602_12_03_09_Pro.npy,Cramp,junali,14
+landmarks/FLU/harkhapratim gogoi/HARKAPRATIM_2.npy,FLU,harkhapratim gogoi,20
+landmarks/MUMPSE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_14.npy,MUMPSE,arinjit kataki,31
+landmarks/DIARRHOEA/Akash/Akash__Akash__AKASH_22.npy,DIARRHOEA,akash,16
+landmarks/Sore Finger/Anindita/Anindita__Anindita__Anindita_1.npy,Sore Finger,anindita,41
+landmarks/BRUISE/chayanika/CHAYANIKA_2.npy,BRUISE,chayanika,4
+landmarks/SORE THROAT/pranati/PRANATI_28.npy,SORE THROAT,pranati,37
+landmarks/Hiv/rinki/RINKI_14.npy,Hiv,rinki,27
+landmarks/Hiv/anindita/ANINDITA_4.npy,Hiv,anindita,27
+landmarks/Bleed/rajkumar/RAJKUMAR_20.npy,Bleed,rajkumar,6
+landmarks/HEAD ACHE/arinjit kataki/ARINJIT_34.npy,HEAD ACHE,arinjit kataki,23
+landmarks/Cold/Biraj/Biraj__Biraj__BIRAJ_19.npy,Cold,biraj,12
+landmarks/TB/Naresh/Naresh__Naresh__NARESH_1.npy,TB,naresh,44
+landmarks/Vomit/Umiraj/Umiraj__Umiraj__UMIRAJ_16.npy,Vomit,umiraj,46
+landmarks/Itch/rupanjali/RUPANJALI_15.npy,Itch,rupanjali,29
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_20.npy,JAUNDICE,arinjit kataki,30
+landmarks/Sunburn/Shubham/Shubham__Shubham__SHUBHAM_12.mp4.npy,Sunburn,shubham,42
+landmarks/HEAT BURN/chayanika/CHAYANIKA_ 11.npy,HEAT BURN,chayanika,25
+landmarks/Swell/Rinki/Rinki__Rinki__Rinki_14.npy,Swell,rinki,43
+landmarks/Diabetes/anindita/ANINDITA_2.npy,Diabetes,anindita,17
+landmarks/Vomit/Biraj/Biraj__Biraj__BIRAJ_5.npy,Vomit,biraj,46
+landmarks/RUNNY NOSE/harkhapratim gogoi/HARKAPRATIM_13.npy,RUNNY NOSE,harkhapratim gogoi,33
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_24.npy,BROKEN BONES,chayanika,3
+landmarks/Allergies/Biraj/Biraj__Biraj__BIRAJ_22.npy,Allergies,biraj,1
+landmarks/MUMPSE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM2.npy,MUMPSE,harkhapratim gogoi,31
+landmarks/Faint/rajkumar/RAJKUMAR_33.npy,Faint,rajkumar,21
+landmarks/Swell/Junali/Junali__Junali__Junali_13.npy,Swell,junali,43
+landmarks/Bleed/anindita/ANINDITA_19.npy,Bleed,anindita,6
+landmarks/Cut/Umiraj/Umiraj__Umiraj__UMIRAJ_12.npy,Cut,umiraj,15
+landmarks/Ear Ache/Bishal/Bishal__Bishal__BISHAL_4.npy,Ear Ache,bishal,19
+landmarks/Itch/junali/JUNALI_18.npy,Itch,junali,29
+landmarks/Bleed/rajkumar/RAJKUMAR_41.npy,Bleed,rajkumar,6
+landmarks/STOMACH ACHE/prakash/PRAKASH_18.npy,STOMACH ACHE,prakash,39
+landmarks/Cold/Shubham/Shubham__Shubham__SHUBHAM_12.npy,Cold,shubham,12
+landmarks/Vomit/Kalyan/Kalyan__Kalyan__KALYAN_39.npy,Vomit,kalyan,46
+landmarks/Sunburn/Shubham/Shubham__Shubham__SHUBHAM_16.mp4.npy,Sunburn,shubham,42
+landmarks/Injury/Bishal/Bishal__Bishal__BISHAL_17.npy,Injury,bishal,28
+landmarks/Allergies/Shubham/Shubham__Shubham__SHUBHAM_14.npy,Allergies,shubham,1
+landmarks/BLOOD PRESSURE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_4.npy,BLOOD PRESSURE,arinjit kataki,2
+landmarks/Dizziness/Rajkumar/Rajkumar__Rajkumar__Rajkumar_2.npy,Dizziness,rajkumar,18
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_58_43_Pro.npy,Fever,rinki,22
+landmarks/Itch/rupanjali/RUPANJALI_10.npy,Itch,rupanjali,29
+landmarks/Diabetes/rinki/RINKI_17.npy,Diabetes,rinki,17
+landmarks/CONJUCTIVITIES/NARESH/NARESH__NARESH__NARESH_12.npy,CONJUCTIVITIES,naresh,10
+landmarks/ASTHMA/SURESH/SURESH__SURESH__SURESH_5.npy,ASTHMA,suresh,0
+landmarks/Sneeze/Rinki/Rinki__Rinki__WIN_20250602_12_40_10_Pro.npy,Sneeze,rinki,40
+landmarks/Cancer/anindita/ANINDITA_18.npy,Cancer,anindita,11
+landmarks/Cough/Umiraj/Umiraj__Umiraj__UMIRAJ_22.npy,Cough,umiraj,13
+landmarks/HEAT BURN/prakash/PRAKASH_31.npy,HEAT BURN,prakash,25
+landmarks/nausea/anindita/ANINDITA_24.npy,nausea,anindita,47
+landmarks/Cough/Kalyan/Kalyan__Kalyan__KALYAN_15.npy,Cough,kalyan,13
+landmarks/HEART ATTACK/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_15.npy,HEART ATTACK,arinjit kataki,24
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_18.npy,BROKEN BONES,chayanika,3
+landmarks/nausea/Rajkumar/Rajkumar__Rajkumar__RAJKUMAR_5.npy,nausea,rajkumar,47
+landmarks/Rash/Biraj/Biraj__Biraj__BIRAJ_20.npy,Rash,biraj,34
+landmarks/Cold/Bishal/Bishal__Bishal__BISHAL_43.npy,Cold,bishal,12
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_59_24_Pro.npy,Fever,rinki,22
+landmarks/JAUNDICE/AKASH/AKASH__AKASH__AKASH_5.npy,JAUNDICE,akash,30
+landmarks/BRUISE/prakash/PRAKASH_7.npy,BRUISE,prakash,4
+landmarks/HEAT BURN/prakash/PRAKASH_16.npy,HEAT BURN,prakash,25
+landmarks/Bone Fracture/rinki/RINKI_9.npy,Bone Fracture,rinki,7
+landmarks/nausea/rupanjali/RUPANJALI_19.npy,nausea,rupanjali,47
+landmarks/HEAD ACHE/pranati/PRANATI_20.npy,HEAD ACHE,pranati,23
+landmarks/Cancer/rinki/RINKI_29.npy,Cancer,rinki,11
+landmarks/Tooth ache/anindita/Anindita_27.npy,Tooth ache,anindita,45
+landmarks/SHOULDER PAIN/chayanika/CHAYANIKA_15.npy,SHOULDER PAIN,chayanika,36
+landmarks/Tooth ache/anindita/Anindita_22.npy,Tooth ache,anindita,45
+landmarks/Diabetes/rupanjali/RUPANJALI_12.npy,Diabetes,rupanjali,17
+landmarks/HEART ATTACK/SURESH/SURESH__SURESH__SURESH_5.npy,HEART ATTACK,suresh,24
+landmarks/JAUNDICE/NARESH/NARESH__NARESH__NARESH_13.npy,JAUNDICE,naresh,30
+landmarks/HEAT BURN/pranati/PRANATI_2.npy,HEAT BURN,pranati,25
+landmarks/Measles/rinki/RINKI_24.npy,Measles,rinki,32
+landmarks/BRUISE/pranati/PRANATI_2.npy,BRUISE,pranati,4
+landmarks/RUNNY NOSE/arinjit kataki/ARINJIT_15.npy,RUNNY NOSE,arinjit kataki,33
+landmarks/Cough/Bishal/Bishal__Bishal__BISHAL_32.npy,Cough,bishal,13
+landmarks/Broken Arm/Biraj/Biraj__Biraj__BIRAJ_21.npy,Broken Arm,biraj,8
+landmarks/Sneeze/Anindita/Anindita__Anindita__WIN_20250602_12_20_49_Pro.npy,Sneeze,anindita,40
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_8.npy,STD,naresh,38
+landmarks/DIARRHOEA/Naresh/Naresh__Naresh__NARESH_3.npy,DIARRHOEA,naresh,16
+landmarks/Faint/rupanjali/RUPANJALI_29.npy,Faint,rupanjali,21
+landmarks/RUNNY NOSE/prakash/PRAKASH_48.npy,RUNNY NOSE,prakash,33
+landmarks/Broken Arm/Umiraj/Umiraj__Umiraj__UMIRAJ_9.npy,Broken Arm,umiraj,8
+landmarks/Sunburn/Shubham/Shubham__Shubham__SHUBHAM_2.mp4.npy,Sunburn,shubham,42
+landmarks/FLU/arinjit kataki/ARINJIT_7.npy,FLU,arinjit kataki,20
+landmarks/Measles/rajkumar/RAJKUMAR_12.npy,Measles,rajkumar,32
+landmarks/Fever/anindita/WIN_20250602_12_26_45_Pro.npy,Fever,anindita,22
+landmarks/BROKEN BONES/pranati/PRANATI_4.npy,BROKEN BONES,pranati,3
+landmarks/Sneeze/Junali/Junali__Junali__Junali_3.npy,Sneeze,junali,40
+landmarks/Bone Fracture/junali/JUNALI_3.npy,Bone Fracture,junali,7
+landmarks/Cold/Bishal/Bishal__Bishal__BISHAL_38.npy,Cold,bishal,12
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_22.npy,STD,harkhapratim gogoi,38
+landmarks/STOMACH ACHE/chayanika/CHAYANIKA_27.npy,STOMACH ACHE,chayanika,39
+landmarks/HEAD ACHE/chayanika/CHAYANIKA_1.npy,HEAD ACHE,chayanika,23
+landmarks/BROKEN BONES/arinjit kataki/ARINJIT_17.npy,BROKEN BONES,arinjit kataki,3
+landmarks/CHICKEN POX/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_25.npy,CHICKEN POX,arinjit kataki,9
+landmarks/RUNNY NOSE/prakash/PRAKASH_45.npy,RUNNY NOSE,prakash,33
+landmarks/Sneeze/Rinki/Rinki__Rinki__WIN_20250602_12_41_37_Pro.npy,Sneeze,rinki,40
+landmarks/Injury/Shubham/Shubham__Shubham__SHUBHAM_10.npy,Injury,shubham,28
+landmarks/SHOULDER PAIN/pranati/PRANATI_16.npy,SHOULDER PAIN,pranati,36
+landmarks/TB/Naresh/Naresh__Naresh__NARESH_20.npy,TB,naresh,44
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_11.npy,BROKEN BONES,chayanika,3
+landmarks/Measles/anindita/ANINDITA_13.npy,Measles,anindita,32
+landmarks/Retching/rinki/RINKI_6.npy,Retching,rinki,35
+landmarks/STOMACH ACHE/chayanika/CHAYANIKA_42.npy,STOMACH ACHE,chayanika,39
+landmarks/HEAD ACHE/chayanika/CHAYANIKA_18.npy,HEAD ACHE,chayanika,23
+landmarks/Sneeze/Junali/Junali__Junali__Junali_12.npy,Sneeze,junali,40
+landmarks/Itch/anindita/ANINDITA_24.npy,Itch,anindita,29
+landmarks/Cramp/Rinki/Rinki__Rinki__Rinki_17.npy,Cramp,rinki,14
+landmarks/Sore Finger/Anindita/Anindita__Anindita__WIN_20250602_12_19_12_Pro.npy,Sore Finger,anindita,41
+landmarks/STOMACH ACHE/harkhapratim gogoi/HARKAPRATIM_2.npy,STOMACH ACHE,harkhapratim gogoi,39
+landmarks/CHICKEN POX/SURESH/SURESH__SURESH__SURESH_1.npy,CHICKEN POX,suresh,9
+landmarks/HEAD ACHE/arinjit kataki/ARINJIT_22.npy,HEAD ACHE,arinjit kataki,23
+landmarks/SORE THROAT/chayanika/CHAYANIKA_9.npy,SORE THROAT,chayanika,37
+landmarks/Broken Arm/Biraj/Biraj__Biraj__BIRAJ_25.npy,Broken Arm,biraj,8
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_3.npy,Ear Ache,umiraj,19
+landmarks/Sneeze/Rinki/Rinki__Rinki__Rinki_37.npy,Sneeze,rinki,40
+landmarks/HEAT BURN/harkhapratim gogoi/HARKAPRATIM_18.npy,HEAT BURN,harkhapratim gogoi,25
+landmarks/Injury/Kalyan/Kalyan__Kalyan__KALYAN_38.npy,Injury,kalyan,28
+landmarks/Back Ache/Rinki/Rinki__Rinki__Rinki_10.npy,Back Ache,rinki,5
+landmarks/HEAD ACHE/chayanika/CHAYANIKA_6.npy,HEAD ACHE,chayanika,23
+landmarks/Sunburn/Bishal/Bishal__Bishal__BISHAL_11.npy,Sunburn,bishal,42
+landmarks/Hiv/rupanjali/RUPANJALI_7.npy,Hiv,rupanjali,27
+landmarks/CHICKEN POX/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_12.npy,CHICKEN POX,arinjit kataki,9
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_32.npy,Ear Ache,umiraj,19
+landmarks/Rash/Umiraj/Umiraj__Umiraj__UMIRAJ_13.npy,Rash,umiraj,34
+landmarks/Tooth ache/Rinki/Rinki__Rinki__Rinki_21.npy,Tooth ache,rinki,45
+landmarks/Cold/Umiraj/Umiraj__Umiraj__UMIRAJ_2.npy,Cold,umiraj,12
+landmarks/STD/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_57.npy,STD,arinjit kataki,38
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_8.mp4.npy,Sunburn,kalyan,42
+landmarks/Cancer/rupanjali/RUPANJALI_22.npy,Cancer,rupanjali,11
+landmarks/SORE THROAT/prakash/PRAKASH_21.npy,SORE THROAT,prakash,37
+landmarks/HEART ATTACK/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_21.npy,HEART ATTACK,arinjit kataki,24
+landmarks/Cough/Kalyan/Kalyan__Kalyan__KALYAN_7.npy,Cough,kalyan,13
+landmarks/JAUNDICE/NARESH/NARESH__NARESH__NARESH_10.npy,JAUNDICE,naresh,30
+landmarks/nausea/anindita/ANINDITA_10.npy,nausea,anindita,47
+landmarks/Hiv/junali/JUNALI_11.npy,Hiv,junali,27
+landmarks/SORE THROAT/arinjit kataki/ARINJIT_24.npy,SORE THROAT,arinjit kataki,37
+landmarks/Diabetes/rajkumar/RAJKUMAR_27.npy,Diabetes,rajkumar,17
+landmarks/nausea/rinki/RINKI_5.npy,nausea,rinki,47
+landmarks/Allergies/Kalyan/Kalyan__Kalyan__KALYAN_4.npy,Allergies,kalyan,1
+landmarks/Bone Fracture/anindita/ANINDITA_24.npy,Bone Fracture,anindita,7
+landmarks/ASTHMA/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_38.npy,ASTHMA,arinjit kataki,0
+landmarks/Cold/Biraj/Biraj__Biraj__BIRAJ_20.npy,Cold,biraj,12
+landmarks/Cut/Biraj/Biraj__Biraj__BIRAJ_16.npy,Cut,biraj,15
+landmarks/Sore Finger/Rinki/Rinki__Rinki__WIN_20250602_12_36_52_Pro.npy,Sore Finger,rinki,41
+landmarks/BRUISE/arinjit kataki/ARINJIT_5.npy,BRUISE,arinjit kataki,4
+landmarks/Ear Ache/Shubham/Shubham__Shubham__SHUBHAM_11.npy,Ear Ache,shubham,19
+landmarks/ASTHMA/NARESH/NARESH__NARESH__NARESH_4.npy,ASTHMA,naresh,0
+landmarks/Ear Ache/Biraj/Biraj__Biraj__BIRAJ_34.npy,Ear Ache,biraj,19
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_10.npy,STD,harkhapratim gogoi,38
+landmarks/Ear Ache/Biraj/Biraj__Biraj__BIRAJ_4.npy,Ear Ache,biraj,19
+landmarks/Retching/anindita/ANINDITA_21.npy,Retching,anindita,35
+landmarks/DIARRHOEA/Naresh/Naresh__Naresh__NARESH_44.npy,DIARRHOEA,naresh,16
+landmarks/Swell/Junali/Junali__Junali__Junali_8.npy,Swell,junali,43
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_43.npy,Broken Arm,kalyan,8
+landmarks/Tooth ache/anindita/Anindita_21.npy,Tooth ache,anindita,45
+landmarks/HEPATITIS/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_32.npy,HEPATITIS,arinjit kataki,26
+landmarks/Swell/anindita/WIN_20250602_12_23_24_Pro.npy,Swell,anindita,43
+landmarks/Diabetes/rinki/RINKI_27.npy,Diabetes,rinki,17
+landmarks/Tooth ache/Junali/Junali__Junali__Junali_17.npy,Tooth ache,junali,45
+landmarks/nausea/anindita/ANINDITA_28.npy,nausea,anindita,47
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_8.npy,DIARRHOEA,arinjit kataki,16
+landmarks/Back Ache/Rinki/Rinki__Rinki__WIN_20250602_12_31_37_Pro.npy,Back Ache,rinki,5
+landmarks/Vomit/Biraj/Biraj__Biraj__BIRAJ_4.npy,Vomit,biraj,46
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_24.npy,STD,harkhapratim gogoi,38
+landmarks/Faint/rajkumar/RAJKUMAR_14.npy,Faint,rajkumar,21
+landmarks/Fever/anindita/Anindita_12.npy,Fever,anindita,22
+landmarks/STD/NARESH/NARESH__NARESH__NARESH_21.npy,STD,naresh,38
+landmarks/Hiv/anindita/ANINDITA_18.npy,Hiv,anindita,27
+landmarks/TB/Suresh/Suresh__Suresh__SURESH_5.npy,TB,suresh,44
+landmarks/Tooth ache/Rupanjali/Rupanjali__Rupanjali__Rupanjali_7.npy,Tooth ache,rupanjali,45
+landmarks/CONJUCTIVITIES/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_32.npy,CONJUCTIVITIES,harkhapratim gogoi,10
+landmarks/HEART ATTACK/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_37.npy,HEART ATTACK,harkhapratim gogoi,24
+landmarks/Injury/Umiraj/Umiraj__Umiraj__UMIRAJ_12.npy,Injury,umiraj,28
+landmarks/JAUNDICE/NARESH/NARESH__NARESH__NARESH_7.npy,JAUNDICE,naresh,30
+landmarks/Faint/rinki/RINKI_10.npy,Faint,rinki,21
+landmarks/Cancer/junali/JUNALI_11.npy,Cancer,junali,11
+landmarks/HEAD ACHE/arinjit kataki/ARINJIT_28.npy,HEAD ACHE,arinjit kataki,23
+landmarks/HEPATITIS/SURESH/SURESH__SURESH__SURESH_2.npy,HEPATITIS,suresh,26
+landmarks/CONJUCTIVITIES/SURESH/SURESH__SURESH__SURESH_3.npy,CONJUCTIVITIES,suresh,10
+landmarks/JAUNDICE/AKASH/AKASH__AKASH__AKASH_18.npy,JAUNDICE,akash,30
+landmarks/ASTHMA/SURESH/SURESH__SURESH__SURESH_3.npy,ASTHMA,suresh,0
+landmarks/Injury/Shubham/Shubham__Shubham__SHUBHAM_16.npy,Injury,shubham,28
+landmarks/HEART ATTACK/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_25.npy,HEART ATTACK,arinjit kataki,24
+landmarks/HEAT BURN/chayanika/CHAYANIKA_ 4.npy,HEAT BURN,chayanika,25
+landmarks/Ear Ache/Kalyan/Kalyan__Kalyan__KALYAN_4.npy,Ear Ache,kalyan,19
+landmarks/Hiv/junali/JUNALI_6.npy,Hiv,junali,27
+landmarks/Diabetes/rupanjali/RUPANJALI_2.npy,Diabetes,rupanjali,17
+landmarks/MUMPSE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_42.npy,MUMPSE,arinjit kataki,31
+landmarks/Ear Ache/Shubham/Shubham__Shubham__SHUBHAM_2.npy,Ear Ache,shubham,19
+landmarks/Dizziness/anindita/Anindita_9.npy,Dizziness,anindita,18
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_10.mp4.npy,Sunburn,kalyan,42
+landmarks/Sore Finger/Anindita/Anindita__Anindita__WIN_20250602_12_19_25_Pro.npy,Sore Finger,anindita,41
+landmarks/Vomit/Shubham/Shubham__Shubham__SHUBHAM_6.npy,Vomit,shubham,46
+landmarks/Sneeze/Anindita/Anindita__Anindita__WIN_20250602_12_20_15_Pro.npy,Sneeze,anindita,40
+landmarks/Itch/rajkumar/RAJKUMAR_7.npy,Itch,rajkumar,29
+landmarks/Ear Ache/Biraj/Biraj__Biraj__BIRAJ_52.npy,Ear Ache,biraj,19
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_13.npy,CONJUCTIVITIES,akash,10
+landmarks/Dizziness/anindita/WIN_20250602_12_15_25_Pro.npy,Dizziness,anindita,18
+landmarks/Itch/rajkumar/RAJKUMAR_8.npy,Itch,rajkumar,29
+landmarks/STD/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_25.npy,STD,harkhapratim gogoi,38
+landmarks/Cold/Shubham/Shubham__Shubham__SHUBHAM_3.npy,Cold,shubham,12
+landmarks/Fever/anindita/Anindita_20.npy,Fever,anindita,22
+landmarks/TB/harkhapratim gogoi/HARKHAPRATIM_23.npy,TB,harkhapratim gogoi,44
+landmarks/Swell/Rinki/Rinki__Rinki__WIN_20250602_12_53_40_Pro.npy,Swell,rinki,43
+landmarks/JAUNDICE/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__HARKHAPRATIM_15.npy,JAUNDICE,arinjit kataki,30
+landmarks/Rash/Biraj/Biraj__Biraj__BIRAJ_6.npy,Rash,biraj,34
+landmarks/Sore Finger/Rinki/Rinki__Rinki__WIN_20250602_12_37_22_Pro.npy,Sore Finger,rinki,41
+landmarks/Cold/Umiraj/Umiraj__Umiraj__UMIRAJ_33.npy,Cold,umiraj,12
+landmarks/Injury/Kalyan/Kalyan__Kalyan__KALYAN_19.npy,Injury,kalyan,28
+landmarks/HEART ATTACK/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_33.npy,HEART ATTACK,harkhapratim gogoi,24
+landmarks/SHOULDER PAIN/arinjit kataki/ARINJIT_10.npy,SHOULDER PAIN,arinjit kataki,36
+landmarks/Swell/Rinki/Rinki__Rinki__Rinki_8.npy,Swell,rinki,43
+landmarks/SORE THROAT/chayanika/CHAYANIKA_20.npy,SORE THROAT,chayanika,37
+landmarks/TB/harkhapratim gogoi/HARKHAPRATIM_30.npy,TB,harkhapratim gogoi,44
+landmarks/HEAT BURN/chayanika/CHAYANIKA_ 28.npy,HEAT BURN,chayanika,25
+landmarks/Cough/Shubham/Shubham__Shubham__SHUBHAM_12.npy,Cough,shubham,13
+landmarks/Cold/Kalyan/Kalyan__Kalyan__KALYAN_17.npy,Cold,kalyan,12
+landmarks/Swell/Rinki/Rinki__Rinki__WIN_20250602_12_53_54_Pro.npy,Swell,rinki,43
+landmarks/Tooth ache/Rinki/Rinki__Rinki__WIN_20250602_12_30_06_Pro.npy,Tooth ache,rinki,45
+landmarks/Cough/Bishal/Bishal__Bishal__BISHAL_23.npy,Cough,bishal,13
+landmarks/Cancer/rajkumar/RAJKUMAR_31.npy,Cancer,rajkumar,11
+landmarks/Cold/Kalyan/Kalyan__Kalyan__KALYAN_36.npy,Cold,kalyan,12
+landmarks/SORE THROAT/arinjit kataki/ARINJIT_16.npy,SORE THROAT,arinjit kataki,37
+landmarks/Ear Ache/Umiraj/Umiraj__Umiraj__UMIRAJ_19.npy,Ear Ache,umiraj,19
+landmarks/Rash/Bishal/Bishal__Bishal__BISHAL_8.npy,Rash,bishal,34
+landmarks/MUMPSE/AKASH/AKASH__AKASH__AKASH_18.npy,MUMPSE,akash,31
+landmarks/Injury/Shubham/Shubham__Shubham__SHUBHAM_22.npy,Injury,shubham,28
+landmarks/HEPATITIS/NARESH/NARESH__NARESH__NARESH_2.npy,HEPATITIS,naresh,26
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_14.npy,DIARRHOEA,arinjit kataki,16
+landmarks/RUNNY NOSE/harkhapratim gogoi/HARKAPRATIM_17.npy,RUNNY NOSE,harkhapratim gogoi,33
+landmarks/Swell/Junali/Junali__Junali__WIN_20250602_11_59_28_Pro.npy,Swell,junali,43
+landmarks/CONJUCTIVITIES/NARESH/NARESH__NARESH__NARESH_27.npy,CONJUCTIVITIES,naresh,10
+landmarks/SHOULDER PAIN/prakash/PRAKASH_28.npy,SHOULDER PAIN,prakash,36
+landmarks/HEAD ACHE/harkhapratim gogoi/HARKAPRATIM_8.npy,HEAD ACHE,harkhapratim gogoi,23
+landmarks/Injury/Kalyan/Kalyan__Kalyan__KALYAN_5.npy,Injury,kalyan,28
+landmarks/Dizziness/anindita/Anindita_7.npy,Dizziness,anindita,18
+landmarks/Bleed/junali/JUNALI_29.npy,Bleed,junali,6
+landmarks/nausea/Rajkumar/Rajkumar__Rajkumar__RAJKUMAR_18.npy,nausea,rajkumar,47
+landmarks/Allergies/Bishal/Bishal__Bishal__BISHAL_21.npy,Allergies,bishal,1
+landmarks/FLU/prakash/PRAKASH_11.npy,FLU,prakash,20
+landmarks/BROKEN BONES/arinjit kataki/ARINJIT_4.npy,BROKEN BONES,arinjit kataki,3
+landmarks/STD/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_40.npy,STD,arinjit kataki,38
+landmarks/Rash/Biraj/Biraj__Biraj__BIRAJ_34.npy,Rash,biraj,34
+landmarks/STOMACH ACHE/arinjit kataki/ARINJIT_8.npy,STOMACH ACHE,arinjit kataki,39
+landmarks/nausea/junali/JUNALI_25.npy,nausea,junali,47
+landmarks/Bone Fracture/anindita/ANINDITA_20.npy,Bone Fracture,anindita,7
+landmarks/RUNNY NOSE/harkhapratim gogoi/HARKAPRATIM_19.npy,RUNNY NOSE,harkhapratim gogoi,33
+landmarks/STD/AKASH/AKASH__AKASH__AKASH_31.npy,STD,akash,38
+landmarks/Cramp/Rinki/Rinki__Rinki__WIN_20250602_12_55_48_Pro.npy,Cramp,rinki,14
+landmarks/HEPATITIS/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_7.npy,HEPATITIS,arinjit kataki,26
+landmarks/Rash/Biraj/Biraj__Biraj__BIRAJ_12.npy,Rash,biraj,34
+landmarks/Bleed/rupanjali/RUPANJALI_18.npy,Bleed,rupanjali,6
+landmarks/HEART ATTACK/AKASH/AKASH__AKASH__AKASH_2.npy,HEART ATTACK,akash,24
+landmarks/Cut/Biraj/Biraj__Biraj__BIRAJ_1.npy,Cut,biraj,15
+landmarks/Sore Finger/Rinki/Rinki__Rinki__Rinki_3.npy,Sore Finger,rinki,41
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_57_29_Pro.npy,Fever,rinki,22
+landmarks/ASTHMA/AKASH/AKASH__AKASH__AKASH_10.npy,ASTHMA,akash,0
+landmarks/Retching/rajkumar/RAJKUMAR_20.npy,Retching,rajkumar,35
+landmarks/STOMACH ACHE/prakash/PRAKASH_29.npy,STOMACH ACHE,prakash,39
+landmarks/HEAD ACHE/harkhapratim gogoi/HARKAPRATIM_7.npy,HEAD ACHE,harkhapratim gogoi,23
+landmarks/TB/Naresh/Naresh__Naresh__NARESH_37.npy,TB,naresh,44
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_13.npy,BROKEN BONES,chayanika,3
+landmarks/Sunburn/Umiraj/Umiraj__Umiraj__UMIRAJ_11.mp4.npy,Sunburn,umiraj,42
+landmarks/Ear Ache/Biraj/Biraj__Biraj__BIRAJ_18.npy,Ear Ache,biraj,19
+landmarks/SORE THROAT/prakash/PRAKASH_35.npy,SORE THROAT,prakash,37
+landmarks/Broken Arm/Bishal/Bishal__Bishal__BISHAL_15.npy,Broken Arm,bishal,8
+landmarks/RUNNY NOSE/chayanika/CHAYANIKA_13.npy,RUNNY NOSE,chayanika,33
+landmarks/JAUNDICE/NARESH/NARESH__NARESH__NARESH_1.npy,JAUNDICE,naresh,30
+landmarks/Cold/Umiraj/Umiraj__Umiraj__UMIRAJ_19.npy,Cold,umiraj,12
+landmarks/Broken Arm/Shubham/Shubham__Shubham__SHUBHAM_14.npy,Broken Arm,shubham,8
+landmarks/DIARRHOEA/Akash/Akash__Akash__AKASH_26.npy,DIARRHOEA,akash,16
+landmarks/Retching/rupanjali/RUPANJALI_4.npy,Retching,rupanjali,35
+landmarks/CONJUCTIVITIES/AKASH/AKASH__AKASH__AKASH_27.npy,CONJUCTIVITIES,akash,10
+landmarks/BROKEN BONES/chayanika/CHAYANIKA_4.npy,BROKEN BONES,chayanika,3
+landmarks/BLOOD PRESSURE/NARESH/NARESH__NARESH__NARESH_26.npy,BLOOD PRESSURE,naresh,2
+landmarks/BROKEN BONES/prakash/PRAKASH_7.npy,BROKEN BONES,prakash,3
+landmarks/Sunburn/Kalyan/Kalyan__Kalyan__KALYAN_25.mp4.npy,Sunburn,kalyan,42
+landmarks/BRUISE/arinjit kataki/ARINJIT_1.npy,BRUISE,arinjit kataki,4
+landmarks/Cut/Bishal/Bishal__Bishal__BISHAL_1.npy,Cut,bishal,15
+landmarks/TB/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_28.npy,TB,arinjit kataki,44
+landmarks/nausea/junali/JUNALI_1.npy,nausea,junali,47
+landmarks/Vomit/Shubham/Shubham__Shubham__SHUBHAM_9.npy,Vomit,shubham,46
+landmarks/Bleed/anindita/ANINDITA_13.npy,Bleed,anindita,6
+landmarks/Retching/rupanjali/RUPANJALI_38.npy,Retching,rupanjali,35
+landmarks/MUMPSE/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM10.npy,MUMPSE,harkhapratim gogoi,31
+landmarks/Cancer/rinki/RINKI_21.npy,Cancer,rinki,11
+landmarks/Cramp/Rinki/Rinki__Rinki__Rinki_9.npy,Cramp,rinki,14
+landmarks/Rash/Bishal/Bishal__Bishal__BISHAL_24.npy,Rash,bishal,34
+landmarks/HEAT BURN/arinjit kataki/ARINJIT_ 7.npy,HEAT BURN,arinjit kataki,25
+landmarks/Retching/rajkumar/RAJKUMAR_24.npy,Retching,rajkumar,35
+landmarks/Rash/Kalyan/Kalyan__Kalyan__KALYAN_20.npy,Rash,kalyan,34
+landmarks/Dizziness/anindita/Anindita_20.npy,Dizziness,anindita,18
+landmarks/RUNNY NOSE/chayanika/CHAYANIKA_10.npy,RUNNY NOSE,chayanika,33
+landmarks/Cancer/rinki/RINKI_24.npy,Cancer,rinki,11
+landmarks/STD/ARINJIT KATAKI/ARINJIT_KATAKI__ARINJIT_KATAKI__ARINJIT_59.npy,STD,arinjit kataki,38
+landmarks/Faint/rupanjali/RUPANJALI_10.npy,Faint,rupanjali,21
+landmarks/Fever/Rinki/Rinki__Rinki__WIN_20250602_12_58_12_Pro.npy,Fever,rinki,22
+landmarks/Back Ache/Junali/Junali__Junali__Junali_6.npy,Back Ache,junali,5
+landmarks/Itch/rupanjali/RUPANJALI_16.npy,Itch,rupanjali,29
+landmarks/Swell/Junali/Junali__Junali__WIN_20250602_11_59_05_Pro.npy,Swell,junali,43
+landmarks/BRUISE/arinjit kataki/ARINJIT_8.npy,BRUISE,arinjit kataki,4
+landmarks/Bone Fracture/rajkumar/RAJKUMAR_6.npy,Bone Fracture,rajkumar,7
+landmarks/Fever/anindita/Anindita_8.npy,Fever,anindita,22
+landmarks/DIARRHOEA/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_31.npy,DIARRHOEA,arinjit kataki,16
+landmarks/Cough/Umiraj/Umiraj__Umiraj__UMIRAJ_9.npy,Cough,umiraj,13
+landmarks/Broken Arm/Kalyan/Kalyan__Kalyan__KALYAN_13.npy,Broken Arm,kalyan,8
+landmarks/SHOULDER PAIN/prakash/PRAKASH_7.npy,SHOULDER PAIN,prakash,36
+landmarks/ASTHMA/NARESH/NARESH__NARESH__NARESH_15.npy,ASTHMA,naresh,0
+landmarks/Faint/rinki/RINKI_16.npy,Faint,rinki,21
+landmarks/Cancer/anindita/ANINDITA_9.npy,Cancer,anindita,11
+landmarks/BLOOD PRESSURE/NARESH/NARESH__NARESH__NARESH_17.npy,BLOOD PRESSURE,naresh,2
+landmarks/HEPATITIS/NARESH/NARESH__NARESH__NARESH_3.npy,HEPATITIS,naresh,26
+landmarks/Faint/junali/JUNALI_3.npy,Faint,junali,21
+landmarks/HEAT BURN/pranati/PRANATI_38.npy,HEAT BURN,pranati,25
+landmarks/CONJUCTIVITIES/HARKHAPRATIM GOGOI/HARKHAPRATIM_GOGOI__HARKHAPRATIM_GOGOI__HARKHAPRATIM_20.npy,CONJUCTIVITIES,harkhapratim gogoi,10
+landmarks/Sneeze/Junali/Junali__Junali__Junali_9.npy,Sneeze,junali,40
+landmarks/STOMACH ACHE/chayanika/CHAYANIKA_14.npy,STOMACH ACHE,chayanika,39
+landmarks/Swell/Rajkumar/Rajkumar__Rajkumar__Rajkumar_5.npy,Swell,rajkumar,43
+landmarks/RUNNY NOSE/harkhapratim gogoi/HARKAPRATIM_27.npy,RUNNY NOSE,harkhapratim gogoi,33
+landmarks/Injury/Biraj/Biraj__Biraj__BIRAJ_12.npy,Injury,biraj,28
+landmarks/Measles/rajkumar/RAJKUMAR_2.npy,Measles,rajkumar,32
+landmarks/Ear Ache/Kalyan/Kalyan__Kalyan__KALYAN_14.npy,Ear Ache,kalyan,19
+landmarks/Sunburn/Shubham/Shubham__Shubham__SHUBHAM_5.mp4.npy,Sunburn,shubham,42
+landmarks/Cold/Biraj/Biraj__Biraj__BIRAJ_17.npy,Cold,biraj,12
+landmarks/TB/Arinjit Kataki/Arinjit_Kataki__Arinjit_Kataki__ARINJIT_34.npy,TB,arinjit kataki,44
+landmarks/FLU/chayanika/CHAYANIKA_1.npy,FLU,chayanika,20
+landmarks/BLOOD PRESSURE/AKASH/AKASH__AKASH__AKASH_26.npy,BLOOD PRESSURE,akash,2
+landmarks/HEART ATTACK/AKASH/AKASH__AKASH__AKASH_3.npy,HEART ATTACK,akash,24
+landmarks/Swell/anindita/Anindita_6.npy,Swell,anindita,43
+landmarks/Sore Finger/Rinki/Rinki__Rinki__Rinki_9.npy,Sore Finger,rinki,41
+landmarks/Sneeze/Anindita/Anindita__Anindita__WIN_20250602_12_21_18_Pro.npy,Sneeze,anindita,40
+landmarks/Hiv/rajkumar/RAJKUMAR_1.npy,Hiv,rajkumar,27
+landmarks/Cancer/rupanjali/RUPANJALI_4.npy,Cancer,rupanjali,11
+landmarks/Vomit/Kalyan/Kalyan__Kalyan__KALYAN_47.npy,Vomit,kalyan,46
+landmarks/Allergies/Kalyan/Kalyan__Kalyan__KALYAN_7.npy,Allergies,kalyan,1

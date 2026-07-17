@@ -1,0 +1,8 @@
+{
+  "seed_used": 47,
+  "split_type": "80_20_train_val_dev",
+  "val_size": 0.2,
+  "train_samples": 343,
+  "val_samples": 93,
+  "fallback_applied": false
+}
