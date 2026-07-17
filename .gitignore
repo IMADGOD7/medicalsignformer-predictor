@@ -7,3 +7,5 @@
 
 # Or ignore the entire landmarks/data directory if that's where they live
 # landmarks/
+
+#git add model/ config.py .gitignore

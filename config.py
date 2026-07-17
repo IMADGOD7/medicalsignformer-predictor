@@ -1,13 +1,3 @@
-"""
-Configuration for MedicalSignFormer v2 (new research architecture).
-
-Extends the original project's config.py with hyperparameters for the new
-pipeline: Adaptive Graph Attention Network, Motion Feature Fusion,
-Graph-aware Masked Temporal Pretraining, Mamba Temporal Encoder, Temporal
-Attention Pooling, and Monte Carlo Dropout. All new hyperparameters live
-here - no hardcoded values in any module.
-"""
-
 import json
 import warnings
 from pathlib import Path
@@ -103,3 +93,11 @@ FINETUNE_LEARNING_RATE = 1e-4
 FINETUNE_WEIGHT_DECAY = 1e-3
 FINETUNE_MAX_EPOCHS = 50
 FINETUNE_EARLY_STOPPING_PATIENCE = 10
+FINETUNE_EARLY_STOPPING_MIN_DELTA = 1e-3
+FINETUNE_LABEL_SMOOTHING = 0.1
+
+LR_SCHEDULER_FACTOR = 0.5
+LR_SCHEDULER_PATIENCE = 3
+LR_SCHEDULER_THRESHOLD = 1e-3
+LR_SCHEDULER_COOLDOWN = 2
+LR_SCHEDULER_MIN_LR = 1e-6
