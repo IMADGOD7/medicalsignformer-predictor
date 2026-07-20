@@ -1,0 +1,28 @@
+# Numerical Computing
+numpy>=1.26
+scipy>=1.13
+
+# Data Processing
+pandas>=2.2
+
+# Machine Learning
+scikit-learn>=1.5
+
+# Computer Vision
+opencv-python>=4.10
+
+# MediaPipe
+mediapipe>=0.10.14
+
+# Visualization
+matplotlib>=3.9
+
+# Progress Bars
+tqdm>=4.66
+
+# Tensor Operations
+einops>=0.8
+
+# TensorBoard
+tensorboard>=2.18
+statsmodels

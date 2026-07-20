@@ -1,3 +1,4 @@
+
 import json
 import warnings
 from pathlib import Path
@@ -70,12 +71,18 @@ PRETRAIN_MAX_SPAN_LEN = 8
 PRETRAIN_MAX_EPOCHS = 30
 PRETRAIN_LEARNING_RATE = 1e-4
 PRETRAIN_WEIGHT_DECAY = 1e-4
+# Early stopping was originally only wired up for Stage 2 (fine-tuning);
+# added here so Stage 1 doesn't keep training for its full max epoch count
+# once val_masked_mse has genuinely plateaued (e.g. observed: best at epoch
+# 15, no improvement for the next 12 epochs straight).
+PRETRAIN_EARLY_STOPPING_PATIENCE = 10
+PRETRAIN_EARLY_STOPPING_MIN_DELTA = 1e-4
 
 # --- Module 5: Mamba Temporal Encoder ---
 MAMBA_NUM_LAYERS = 4
-MAMBA_STATE_DIM = 16             # SSM state expansion dimension (d_state)
+MAMBA_STATE_DIM = 16          # SSM state expansion dimension (d_state)
 MAMBA_CONV_KERNEL = 4            # local conv kernel size (d_conv)
-MAMBA_EXPAND_FACTOR = 2          # inner expansion factor (typical Mamba default)
+MAMBA_EXPAND_FACTOR = 2         # inner expansion factor (typical Mamba default)
 MAMBA_DROPOUT = 0.2
 
 # --- Module 6: Temporal Attention Pooling ---
@@ -93,9 +100,9 @@ FINETUNE_LEARNING_RATE = 1e-4
 FINETUNE_WEIGHT_DECAY = 1e-3
 FINETUNE_MAX_EPOCHS = 50
 FINETUNE_EARLY_STOPPING_PATIENCE = 10
+
 FINETUNE_EARLY_STOPPING_MIN_DELTA = 1e-3
 FINETUNE_LABEL_SMOOTHING = 0.1
-
 LR_SCHEDULER_FACTOR = 0.5
 LR_SCHEDULER_PATIENCE = 3
 LR_SCHEDULER_THRESHOLD = 1e-3

@@ -1,3 +1,28 @@
+"""
+Evaluation script.
+
+Loads a trained MedicalSignFormerV2 checkpoint and:
+    1. Runs standard (deterministic) inference over the test set, reporting
+       accuracy, per-class precision/recall/F1 (classification_report), and
+       a confusion matrix (saved as a heatmap image).
+    2. Runs Monte Carlo Dropout inference (Module 8) over the same test
+       set, reporting mean confidence, predictive entropy, and per-class
+       variance - giving an uncertainty-aware view of the same predictions,
+       not just point estimates.
+
+Reuses:
+    - dataset/sign_dataset.py / dataset/dataloader.py (unmodified).
+    - data/processed/test.csv, label_map.json (unmodified).
+
+Outputs (written to ROOT / "evaluation"):
+    - classification_report.csv - per-class precision/recall/F1/support.
+    - confusion_matrix.png - heatmap.
+    - mc_dropout_predictions.csv - per-sample prediction, confidence,
+      entropy, predicted-class variance, and whether the prediction was
+      correct - the same "wrong + confident" style analysis referenced
+      earlier for the v1 model, now reproducible for v2.
+"""
+
 from __future__ import annotations
 
 import json
@@ -104,14 +129,28 @@ def save_confusion_matrix(
 
 
 def run_mc_dropout_evaluation(
-    model: torch.nn.Module, test_loader, device: torch.device, label_names: list[str], output_path: Path
+    model: torch.nn.Module, test_loader, device: torch.device, label_names: list[str], output_path: Path,
+    test_csv_path: Path | None = None,
 ) -> None:
     """Runs MC Dropout inference sample-by-batch over the test set and
     writes a per-sample CSV of prediction/confidence/entropy/variance/
-    correctness, plus prints summary statistics."""
+    correctness, plus prints summary statistics.
+
+    If `test_csv_path` is given, `filepath` is read from that CSV (in the
+    same row order MedicalSignDataset iterates it) and included in the
+    output, so predictions can be paired against another model's per-sample
+    results by sample identity rather than assumed row order - shuffle
+    settings, DataLoader internals, or a differently-ordered CSV could
+    otherwise silently misalign two "row i" comparisons.
+    """
     enable_mc_dropout(model)
 
+    filepaths: list[str] | None = None
+    if test_csv_path is not None and test_csv_path.exists():
+        filepaths = pd.read_csv(test_csv_path)["filepath"].tolist()
+
     rows = []
+    sample_idx = 0
     with torch.no_grad():
         for features, labels, lengths in test_loader:
             features = features.to(device)
@@ -126,14 +165,18 @@ def run_mc_dropout_evaluation(
             true_labels = labels.tolist()
 
             for true_label, pred, conf, ent, var in zip(true_labels, predictions, confidences, entropies, pred_variances):
-                rows.append({
+                row = {
                     "true_label": label_names[true_label],
                     "predicted_label": label_names[pred],
                     "correct": true_label == pred,
                     "confidence": conf,
                     "entropy": ent,
                     "predicted_class_variance": var,
-                })
+                }
+                if filepaths is not None and sample_idx < len(filepaths):
+                    row["filepath"] = filepaths[sample_idx]
+                rows.append(row)
+                sample_idx += 1
 
     df = pd.DataFrame(rows)
     df.to_csv(output_path, index=False)
@@ -184,7 +227,10 @@ def main() -> None:
     save_confusion_matrix(all_labels, all_predictions, label_names, EVAL_DIR / "confusion_matrix.png")
 
     print("\n--- Monte Carlo Dropout evaluation ---")
-    run_mc_dropout_evaluation(model, test_loader, device, label_names, EVAL_DIR / "mc_dropout_predictions.csv")
+    run_mc_dropout_evaluation(
+        model, test_loader, device, label_names, EVAL_DIR / "mc_dropout_predictions.csv",
+        test_csv_path=ROOT / "data" / "processed" / "test.csv",
+    )
 
     print("\nEvaluation complete.")
 
