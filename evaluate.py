@@ -1,28 +1,3 @@
-"""
-Evaluation script.
-
-Loads a trained MedicalSignFormerV2 checkpoint and:
-    1. Runs standard (deterministic) inference over the test set, reporting
-       accuracy, per-class precision/recall/F1 (classification_report), and
-       a confusion matrix (saved as a heatmap image).
-    2. Runs Monte Carlo Dropout inference (Module 8) over the same test
-       set, reporting mean confidence, predictive entropy, and per-class
-       variance - giving an uncertainty-aware view of the same predictions,
-       not just point estimates.
-
-Reuses:
-    - dataset/sign_dataset.py / dataset/dataloader.py (unmodified).
-    - data/processed/test.csv, label_map.json (unmodified).
-
-Outputs (written to ROOT / "evaluation"):
-    - classification_report.csv - per-class precision/recall/F1/support.
-    - confusion_matrix.png - heatmap.
-    - mc_dropout_predictions.csv - per-sample prediction, confidence,
-      entropy, predicted-class variance, and whether the prediction was
-      correct - the same "wrong + confident" style analysis referenced
-      earlier for the v1 model, now reproducible for v2.
-"""
-
 from __future__ import annotations
 
 import json
@@ -92,13 +67,15 @@ def save_classification_report(
 ) -> None:
     report_dict = classification_report(
         all_labels, all_predictions, labels=list(range(len(label_names))),
-        target_names=label_names, output_dict=True, zero_division=0,
-    )
+        target_names=label_names, output_dict=True, zero_division=0,)
+    overall_accuracy = float(np.mean(np.array(all_labels) == np.array(all_predictions)))
+    if "accuracy" not in report_dict:
+        report_dict["accuracy"] = overall_accuracy
+
     report_df = pd.DataFrame(report_dict).transpose()
     report_df.to_csv(output_path)
     print(f"Classification report saved to: {output_path}")
 
-    overall_accuracy = report_dict["accuracy"]
     macro_f1 = report_dict["macro avg"]["f1-score"]
     weighted_f1 = report_dict["weighted avg"]["f1-score"]
     print(f"\nOverall accuracy : {overall_accuracy:.4f}")
@@ -132,17 +109,6 @@ def run_mc_dropout_evaluation(
     model: torch.nn.Module, test_loader, device: torch.device, label_names: list[str], output_path: Path,
     test_csv_path: Path | None = None,
 ) -> None:
-    """Runs MC Dropout inference sample-by-batch over the test set and
-    writes a per-sample CSV of prediction/confidence/entropy/variance/
-    correctness, plus prints summary statistics.
-
-    If `test_csv_path` is given, `filepath` is read from that CSV (in the
-    same row order MedicalSignDataset iterates it) and included in the
-    output, so predictions can be paired against another model's per-sample
-    results by sample identity rather than assumed row order - shuffle
-    settings, DataLoader internals, or a differently-ordered CSV could
-    otherwise silently misalign two "row i" comparisons.
-    """
     enable_mc_dropout(model)
 
     filepaths: list[str] | None = None

@@ -126,8 +126,6 @@ def save_best_model(model: nn.Module, checkpoint_dir: Path = CHECKPOINT_DIR) -> 
 
 
 def build_class_weights(train_csv_path: Path, num_classes: int, device: torch.device) -> torch.Tensor:
-    """1/sqrt(class_count), normalized to mean 1 - identical formula to the
-    original v1 train.py, for direct comparability."""
     train_df = pd.read_csv(train_csv_path)
     counts = train_df["label"].value_counts().reindex(range(num_classes), fill_value=0)
     # Avoid divide-by-zero for any class absent from this particular split.
@@ -161,7 +159,7 @@ def run_training_loop(
         if val_loss < best_val_loss:
             best_val_loss = val_loss
 
-        train_val_gap = train_loss - val_loss
+        train_val_gap = val_loss - train_loss
         print(
             f"Epoch {epoch:3d}/{max_epochs} | "
             f"train_loss={train_loss:.4f} train_acc={train_acc:.4f} | "

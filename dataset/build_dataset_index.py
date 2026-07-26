@@ -1,10 +1,4 @@
-"""
-Dataset index builder for MedicalSignFormer.
 
-This module scans the landmarks directory and generates a master CSV file 
-describing every sample. It automatically generates integer labels based on
-alphabetical sorting of the disease folders.
-"""
 
 from pathlib import Path
 from typing import List, Dict, Any
@@ -12,24 +6,6 @@ import pandas as pd
 import json
 import sys
 
-# --------------------------------------------------------------------------
-# Signer name normalization
-# --------------------------------------------------------------------------
-# The raw signer folder names on disk contain case-only duplicates (e.g.
-# "AKASH" and "Akash" are the same person recorded under two differently-
-# cased folder names), which previously caused dataset_index.csv to report
-# 29 unique signers instead of the real 18. This normalization is applied
-# HERE, at index-build time, rather than as a separate patch script - a
-# separate patch (see merge_signer_folders.py's docstring for the prior
-# failed attempt at this via normalize_signer_names.py) gets silently
-# reverted every time this script re-scans the folder names from scratch.
-# Baking it in here means every regeneration (including via
-# run_stage5_pipeline.py) permanently produces the correct 18 signers.
-#
-# NOTE: this normalizes the signer NAME recorded in the CSV only - it does
-# NOT rename anything on disk. If you also want the actual landmarks/ (and
-# ISL_MED Dataset/, if it has the same duplicates) folder names fixed on
-# disk, that's a separate, deliberate step - see merge_signer_folders.py.
 MANUAL_SPELLING_FIXES: dict[str, str] = {
     "harkapratim": "harkhapratim gogoi",
     "harkha pratim gogoi": "harkhapratim gogoi",
@@ -45,15 +21,7 @@ MANUAL_SPELLING_FIXES: dict[str, str] = {
 
 
 def normalize_signer(raw: str) -> str:
-    """Normalize a raw signer folder name to a canonical identity string.
 
-    Applies case/whitespace normalization first, then the manual
-    spelling-fix map for known typo variants that differ by more than just
-    case. Keep this in sync with merge_signer_folders.py's normalize_signer()
-    if that script is ever used to also fix folder names on disk - they must
-    agree, or the CSV's signer identities and the actual folder names will
-    drift apart again.
-    """
     case_normalized = raw.strip().lower()
     return MANUAL_SPELLING_FIXES.get(case_normalized, case_normalized)
 
@@ -119,7 +87,7 @@ def scan_dataset(dataset_path: Path, label_mapping: Dict[str, int]) -> List[Dict
     return samples
 
 def build_dataset_index(
-    dataset_dir: str = "../landmarks", 
+    dataset_dir: str = "../landmarks",
     output_csv: str = "../dataset_index.csv"
 ) -> None:
     """

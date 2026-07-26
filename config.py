@@ -1,4 +1,3 @@
-
 import json
 import warnings
 from pathlib import Path
@@ -71,18 +70,15 @@ PRETRAIN_MAX_SPAN_LEN = 8
 PRETRAIN_MAX_EPOCHS = 30
 PRETRAIN_LEARNING_RATE = 1e-4
 PRETRAIN_WEIGHT_DECAY = 1e-4
-# Early stopping was originally only wired up for Stage 2 (fine-tuning);
-# added here so Stage 1 doesn't keep training for its full max epoch count
-# once val_masked_mse has genuinely plateaued (e.g. observed: best at epoch
-# 15, no improvement for the next 12 epochs straight).
+
 PRETRAIN_EARLY_STOPPING_PATIENCE = 10
 PRETRAIN_EARLY_STOPPING_MIN_DELTA = 1e-4
 
 # --- Module 5: Mamba Temporal Encoder ---
-MAMBA_NUM_LAYERS = 4
-MAMBA_STATE_DIM = 16          # SSM state expansion dimension (d_state)
-MAMBA_CONV_KERNEL = 4            # local conv kernel size (d_conv)
-MAMBA_EXPAND_FACTOR = 2         # inner expansion factor (typical Mamba default)
+MAMBA_NUM_LAYERS = 2
+MAMBA_STATE_DIM = 6            # SSM state expansion dimension (d_state)
+MAMBA_CONV_KERNEL = 2            # local conv kernel size (d_conv)
+MAMBA_EXPAND_FACTOR = 1          # inner expansion factor (typical Mamba default)
 MAMBA_DROPOUT = 0.2
 
 # --- Module 6: Temporal Attention Pooling ---
@@ -93,7 +89,7 @@ CLASSIFIER_HIDDEN_DIM = EMBED_DIM // 2
 CLASSIFIER_DROPOUT = 0.3
 
 # --- Module 8: Monte Carlo Dropout ---
-MC_DROPOUT_NUM_SAMPLES = 20      # stochastic forward passes at inference
+MC_DROPOUT_NUM_SAMPLES = 20
 
 # --- Fine-tuning (Stage 2) ---
 FINETUNE_LEARNING_RATE = 1e-4
@@ -108,3 +104,7 @@ LR_SCHEDULER_PATIENCE = 3
 LR_SCHEDULER_THRESHOLD = 1e-3
 LR_SCHEDULER_COOLDOWN = 2
 LR_SCHEDULER_MIN_LR = 1e-6
+
+USE_CONTRASTIVE_LOSS = True
+CONTRASTIVE_LOSS_WEIGHT = 0.1
+CONTRASTIVE_LOSS_TEMPERATURE = 0.1

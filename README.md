@@ -6,7 +6,7 @@ A Transformer-State Space based framework for **Medical Sign Language Recognitio
 
 # Overview
 
-MedicalSignFormerV2 is a two-stage deep learning framework designed for medical sign language recognition.
+MedicalSignFormer is a two-stage deep learning framework designed for medical sign language recognition.
 
 The framework first learns general spatio-temporal landmark representations through **self-supervised masked pretraining**, followed by **supervised end-to-end fine-tuning** for disease classification.
 
@@ -70,7 +70,7 @@ Monte Carlo Dropout
 # Project Structure
 
 ```
-MedicalSignFormerV2/
+MedicalSignFormer/
 │
 ├── data/
 │   └── processed/
@@ -105,7 +105,7 @@ MedicalSignFormerV2/
 ```bash
 git clone https://github.com/IMADGOD7/medicalsignformer-predictor.git
 
-cd MedicalSignFormerV2
+cd MedicalSignFormer
 ```
 
 ---

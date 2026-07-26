@@ -1,9 +1,3 @@
-"""Reusable MediaPipe Holistic landmark extraction for MedicalSignFormer.
-
-This module preserves the extraction logic from the Colab reference notebook
-while removing Colab-specific behavior and making paths configurable.
-"""
-
 from __future__ import annotations
 
 import argparse
