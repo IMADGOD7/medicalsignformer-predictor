@@ -1,9 +1,4 @@
-"""
-PyTorch Dataset implementation for MedicalSignFormer.
 
-Loads MediaPipe landmark sequences from .npy files and provides 
-tensors for the DataLoader.
-"""
 
 from pathlib import Path
 import numpy as np
@@ -21,12 +16,6 @@ class MedicalSignDataset(Dataset):
     Custom Dataset for loading medical sign language landmark sequences.
     """
     def __init__(self, csv_file: str | Path, root_dir: str | Path = None, sequence_length: int = SEQUENCE_LENGTH):
-        """
-        Args:
-            csv_file (str or Path): Path to the split CSV file (train, val, test).
-            root_dir (str or Path, optional): Project root for resolving relative paths.
-            sequence_length (int): Fixed number of frames per sample.
-        """
         self.csv_path = Path(csv_file)
         if not self.csv_path.exists():
             raise FileNotFoundError(f"CSV file not found at {self.csv_path}")

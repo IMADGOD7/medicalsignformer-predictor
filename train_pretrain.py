@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import csv
@@ -30,8 +29,7 @@ def run_pretrain_epoch(
     device: torch.device,
     train: bool,
 ) -> float:
-    """One epoch of Stage 1. If `optimizer` is None, runs in eval mode
-    (used for the validation pass) without any gradient updates."""
+
     model.train(mode=train)
 
     total_loss = 0.0
@@ -75,8 +73,6 @@ def log_epoch_to_csv(
 def save_pretrained_encoder(model: MaskedTemporalPretraining, checkpoint_dir: Path = CHECKPOINT_DIR) -> Path:
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_path = checkpoint_dir / "pretrained_encoder.pth"
-    # Save ONLY the encoder - the reconstruction head is pretraining-only
-    # scaffolding, not reused at fine-tuning time.
     torch.save(model.encoder.state_dict(), checkpoint_path)
     return checkpoint_path
 
@@ -109,12 +105,6 @@ def main() -> None:
         weight_decay=config.PRETRAIN_WEIGHT_DECAY,
     )
 
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-    optimizer,
-    T_max=config.PRETRAIN_MAX_EPOCHS,
-    eta_min=1e-6,
-    )
-
     print(
         f"\nStarting Stage 1 pretraining:"
         f"\n  Max Epochs        : {config.PRETRAIN_MAX_EPOCHS}"
@@ -127,27 +117,39 @@ def main() -> None:
     print(f"Per-epoch metrics will also be logged to: {PRETRAIN_LOG_PATH}\n")
 
     best_val_loss = float("inf")
+    epochs_without_improvement = 0
 
     for epoch in range(1, config.PRETRAIN_MAX_EPOCHS + 1):
         train_loss = run_pretrain_epoch(model, train_loader, optimizer, device, train=True)
         val_loss = run_pretrain_epoch(model, val_loader, optimizer=None, device=device, train=False)
-
-        improved = val_loss < best_val_loss
+        improved = (best_val_loss - val_loss) > config.PRETRAIN_EARLY_STOPPING_MIN_DELTA
         checkpoint_saved = False
         if improved:
             best_val_loss = val_loss
+            epochs_without_improvement = 0
             checkpoint_path = save_pretrained_encoder(model)
             checkpoint_saved = True
+        else:
+            epochs_without_improvement += 1
 
-        scheduler.step()
-        
         print(
             f"Epoch {epoch:3d}/{config.PRETRAIN_MAX_EPOCHS} | "
             f"train_masked_mse={train_loss:.4f} | val_masked_mse={val_loss:.4f}"
-            + (f"  -> improved, saved to {checkpoint_path}" if checkpoint_saved else "")
+            + (f"  -> improved, saved to {checkpoint_path}" if checkpoint_saved else
+               f"  -> no improvement for {epochs_without_improvement}/{config.PRETRAIN_EARLY_STOPPING_PATIENCE} epoch(s)")
         )
 
         log_epoch_to_csv(PRETRAIN_LOG_PATH, epoch, train_loss, val_loss, checkpoint_saved)
+
+        if epochs_without_improvement >= config.PRETRAIN_EARLY_STOPPING_PATIENCE:
+            print(
+                f"\nEarly stopping triggered after epoch {epoch} "
+                f"({config.PRETRAIN_EARLY_STOPPING_PATIENCE} epochs without improvement). "
+                f"Best val_masked_mse: {best_val_loss:.4f}"
+            )
+            break
+    else:
+        print(f"\nReached max_epochs={config.PRETRAIN_MAX_EPOCHS} without early stopping.")
 
     print(f"\nStage 1 pretraining complete. Best val_masked_mse: {best_val_loss:.4f}")
     print(f"Pretrained encoder saved to: {CHECKPOINT_DIR / 'pretrained_encoder.pth'}")
