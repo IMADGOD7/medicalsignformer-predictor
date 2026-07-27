@@ -1,10 +1,3 @@
-"""
-DataLoader configuration for MedicalSignFormer.
-
-Handles batching, shuffling, and sequence padding via a custom collate_fn
-since the .npy sequences can have varying number of frames.
-"""
-
 from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
@@ -21,11 +14,11 @@ def collate_fn(batch: list[tuple[torch.Tensor, torch.Tensor]]) -> tuple[torch.Te
     lengths = torch.stack(lengths)
     
     # Pad sequences (batch_first=True makes shape: [batch, seq_len, feature_dim])
-    padded_features = pad_sequence(features, batch_first=True, padding_value=0.0)
+    features_tensor = torch.stack(features)
     
     labels_tensor = torch.stack(labels)
     
-    return padded_features, labels_tensor, lengths
+    return features_tensor, labels_tensor, lengths
 
 
 def get_dataloaders(data_dir,batch_size=config.BATCH_SIZE,num_workers=config.NUM_WORKERS,):
@@ -50,7 +43,9 @@ def get_dataloaders(data_dir,batch_size=config.BATCH_SIZE,num_workers=config.NUM
             batch_size=batch_size,
             shuffle=shuffle,
             num_workers=num_workers,
-            collate_fn=collate_fn
+            collate_fn=collate_fn,
+            pin_memory=torch.cuda.is_available(),
+            persistent_workers=(num_workers > 0),
         )
         
     return dataloaders

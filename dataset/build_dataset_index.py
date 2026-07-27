@@ -1,5 +1,3 @@
-
-
 from pathlib import Path
 from typing import List, Dict, Any
 import pandas as pd
@@ -26,15 +24,6 @@ def normalize_signer(raw: str) -> str:
     return MANUAL_SPELLING_FIXES.get(case_normalized, case_normalized)
 
 def get_disease_folders(dataset_path: Path) -> List[Path]:
-    """
-    Retrieve and sort all valid disease directories in the dataset.
-    
-    Args:
-        dataset_path (Path): Path to the root dataset directory containing landmarks.
-        
-    Returns:
-        List[Path]: A list of paths to valid disease directories, sorted alphabetically.
-    """
     if not dataset_path.exists():
         print(f"Error: Dataset directory '{dataset_path}' does not exist.")
         sys.exit(1)
@@ -45,28 +34,9 @@ def get_disease_folders(dataset_path: Path) -> List[Path]:
     return disease_folders
 
 def generate_label_mapping(disease_folders: List[Path]) -> Dict[str, int]:
-    """
-    Generate an integer label mapping from sorted disease names.
-    
-    Args:
-        disease_folders (List[Path]): A sorted list of disease directory paths.
-        
-    Returns:
-        Dict[str, int]: Mapping from disease name to integer label (0-indexed).
-    """
     return {folder.name: idx for idx, folder in enumerate(disease_folders)}
 
 def scan_dataset(dataset_path: Path, label_mapping: Dict[str, int]) -> List[Dict[str, Any]]:
-    """
-    Scan the dataset structure and gather information for all samples.
-    
-    Args:
-        dataset_path (Path): Root dataset path containing disease folders.
-        label_mapping (Dict[str, int]): Mapping of diseases to their integer labels.
-        
-    Returns:
-        List[Dict[str, Any]]: A list of dictionaries, where each dict represents a single sample.
-    """
     samples = []
     
     for disease_folder in sorted(p for p in dataset_path.iterdir() if p.is_dir()):
@@ -90,13 +60,6 @@ def build_dataset_index(
     dataset_dir: str = "../landmarks",
     output_csv: str = "../dataset_index.csv"
 ) -> None:
-    """
-    Main function to scan the dataset and build the CSV index.
-    
-    Args:
-        dataset_dir (str): Relative or absolute path to the landmarks directory.
-        output_csv (str): Path to save the generated CSV file.
-    """
     dataset_path = Path(dataset_dir).resolve()
     
     disease_folders = get_disease_folders(dataset_path)

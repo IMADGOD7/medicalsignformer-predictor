@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import csv
@@ -12,6 +11,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score
 
 import config
+import model
 from model.medicalsignformer import MedicalSignFormerV2
 from dataset.dataloader import get_dataloaders
 
@@ -223,8 +223,27 @@ def main() -> None:
     class_weights = build_class_weights(ROOT / "data" / "processed" / "train.csv", config.NUM_CLASSES, device)
     criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=config.FINETUNE_LABEL_SMOOTHING)
 
+    encoder_params = []
+    classifier_params = []
+
+    for name, param in model.named_parameters():
+        if "classifier" in name:
+            classifier_params.append(param)
+        else:
+            encoder_params.append(param)
+
     optimizer = torch.optim.AdamW(
-        model.parameters(), lr=config.FINETUNE_LEARNING_RATE, weight_decay=config.FINETUNE_WEIGHT_DECAY
+        [
+            {
+                "params": encoder_params,
+                "lr": config.ENCODER_LR,
+            },
+            {
+                "params": classifier_params,
+                "lr": config.CLASSIFIER_LR,
+            },
+        ],
+        weight_decay=config.FINETUNE_WEIGHT_DECAY,
     )
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="max", factor=config.LR_SCHEDULER_FACTOR, patience=config.LR_SCHEDULER_PATIENCE,
