@@ -7,12 +7,12 @@ from pathlib import Path
 import numpy as np
 import torch
 
-V1_ROOT = Path("C:\\Users\\manab\\OneDrive\\Desktop\\internproject")  # adjust to your actual v1 project path
+V1_ROOT = Path("C:\\Users\\manab\\OneDrive\\Desktop\\internproject")
 V2_ROOT = Path(__file__).parent
 
 WARMUP_RUNS = 10
 TIMED_RUNS = 100
-INFERENCE_TIME_TARGET_SECONDS = 15.0
+INFERENCE_TIME_TARGET_SECONDS = 0.05  # 50ms per sample
 
 
 def time_forward_passes(
