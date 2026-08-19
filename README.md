@@ -348,12 +348,3 @@ If you use this project in your research, please cite the repository.
 
 This project is released under the MIT License.
 
----
-
-# Author
-
-**team**
-
-Computer Science & Engineering
-
-MedicalSignFormer Research Project
