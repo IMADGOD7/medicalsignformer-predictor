@@ -18,96 +18,82 @@ except (FileNotFoundError, json.JSONDecodeError):
         f"Could not load label map from {LABEL_MAP_PATH}. "
         f"Falling back to NUM_CLASSES={DEFAULT_NUM_CLASSES}. "
         "Run preprocessing to generate the label map.",
-        RuntimeWarning,
-        stacklevel=2,
+        RuntimeWarning, stacklevel=2,
     )
 
-TRAIN_RATIO = 0.80
+TRAIN_RATIO = 0.70
 VAL_RATIO = 0.10
-TEST_RATIO = 0.10
+TEST_RATIO = 0.20
+assert abs(TRAIN_RATIO + VAL_RATIO + TEST_RATIO - 1.0) < 1e-6
 
-assert abs(TRAIN_RATIO + VAL_RATIO + TEST_RATIO - 1.0) < 1e-6, \
-    "Split ratios must sum to 1.0"
-
-# --- Original / shared settings ---
-EMBED_DIM = 256          # D: common feature dimension used throughout the new pipeline
-SEQUENCE_LENGTH = 100    # T
+EMBED_DIM = 256
+SEQUENCE_LENGTH = 100
 DROPOUT_RATE = 0.3
 INPUT_DIM = 1629
 BATCH_SIZE = 32
-NUM_WORKERS = 2
+BATCH_SIZE_UNFREEZE = 8  # smaller batch when encoder unfreezes (needs ~2x gradient memory)
+NUM_WORKERS = 0  # Windows: >0 with pin_memory causes hangs after CUDA state changes
 
-# --- True on-disk feature offsets (verified against extract_landmarks.py) ---
-# concatenation order: pose, face, left_hand, right_hand
 POSE_DIM = 99
 FACE_DIM = 1404
 LEFT_HAND_DIM = 63
 RIGHT_HAND_DIM = 63
-LANDMARK_COORD_DIM = 3       # x, y, z per landmark
+LANDMARK_COORD_DIM = 3
 NUM_POSE_LANDMARKS = 33
-NUM_HAND_LANDMARKS = 21      # per hand
+NUM_HAND_LANDMARKS = 21
 
-# --- Module 2: Adaptive Graph Attention Network ---
-GRAPH_HIDDEN_DIM = EMBED_DIM     # per-node feature dim inside GAT layers
+GRAPH_HIDDEN_DIM = EMBED_DIM
 GAT_NUM_HEADS = 4
 GAT_NUM_LAYERS = 2
-GAT_DROPOUT = 0.2
-GAT_LEAKY_RELU_SLOPE = 0.2       # standard GAT attention nonlinearity slope
+GAT_DROPOUT = 0.25
+GAT_LEAKY_RELU_SLOPE = 0.2
 
-# --- Face Encoder (MLP + self-attention, no graph) ---
 FACE_ENCODER_HIDDEN_DIM = EMBED_DIM
 FACE_ENCODER_NUM_HEADS = 4
 FACE_ENCODER_DROPOUT = 0.2
 
-# --- Module 3: Motion Feature Fusion ---
-MOTION_FEATURE_DIM = 3           # delta x, delta y, delta z per landmark, aggregated per modality
+MOTION_FEATURE_DIM = 3
 GATED_FUSION_DROPOUT = 0.1
 
-# --- Module 4: Graph-aware Masked Temporal Pretraining ---
-PRETRAIN_MASK_RATIO = 0.15
-PRETRAIN_MIN_SPAN_LEN = 3
-PRETRAIN_MAX_SPAN_LEN = 8
+PRETRAIN_PROJ_DIM = 128
+PRETRAIN_TEMPERATURE = 0.5
+PRETRAIN_TIME_WARP = 0.08
+PRETRAIN_NOISE_STD = 0.003
+PRETRAIN_DROP_RATIO = 0.04
 PRETRAIN_MAX_EPOCHS = 30
 PRETRAIN_LEARNING_RATE = 1e-4
 PRETRAIN_WEIGHT_DECAY = 1e-4
-
 PRETRAIN_EARLY_STOPPING_PATIENCE = 10
 PRETRAIN_EARLY_STOPPING_MIN_DELTA = 1e-4
 
-# --- Module 5: Mamba Temporal Encoder ---
-MAMBA_NUM_LAYERS = 2
-MAMBA_STATE_DIM = 6            # SSM state expansion dimension (d_state)
-MAMBA_CONV_KERNEL = 2            # local conv kernel size (d_conv)
-MAMBA_EXPAND_FACTOR = 1          # inner expansion factor (typical Mamba default)
-MAMBA_DROPOUT = 0.2
+MAMBA_NUM_LAYERS = 1  # July 94% run used 1 layer — 3 layers doubles params + slows training
+MAMBA_STATE_DIM = 32
+MAMBA_CONV_KERNEL = 4
+MAMBA_EXPAND_FACTOR = 2
+MAMBA_DROPOUT = 0.1
 
-# --- Module 6: Temporal Attention Pooling ---
 TEMPORAL_POOLING_HIDDEN_DIM = EMBED_DIM // 2
 
-# --- Module 7: Classification Head ---
 CLASSIFIER_HIDDEN_DIM = EMBED_DIM // 2
 CLASSIFIER_DROPOUT = 0.3
 
-# --- Module 8: Monte Carlo Dropout ---
 MC_DROPOUT_NUM_SAMPLES = 20
 
-# --- Fine-tuning (Stage 2) ---
-FINETUNE_LEARNING_RATE = 1e-4
-FINETUNE_WEIGHT_DECAY = 1e-3
+FINETUNE_LEARNING_RATE = 5e-4
+FINETUNE_WEIGHT_DECAY = 1e-4
 FINETUNE_MAX_EPOCHS = 50
-FINETUNE_EARLY_STOPPING_PATIENCE = 10
-
-FINETUNE_EARLY_STOPPING_MIN_DELTA = 1e-3
+FINETUNE_EARLY_STOPPING_PATIENCE = 15
+FINETUNE_EARLY_STOPPING_MIN_DELTA = 1e-4
 FINETUNE_LABEL_SMOOTHING = 0.05
-LR_SCHEDULER_FACTOR = 0.5
-LR_SCHEDULER_PATIENCE = 3
-LR_SCHEDULER_THRESHOLD = 1e-3
-LR_SCHEDULER_COOLDOWN = 2
+
+FINETUNE_WARMUP_EPOCHS = 5
 LR_SCHEDULER_MIN_LR = 1e-6
 
-USE_CONTRASTIVE_LOSS = True
-CONTRASTIVE_LOSS_WEIGHT = 0.1
-CONTRASTIVE_LOSS_TEMPERATURE = 0.1
+ENCODER_FREEZE_EPOCHS = 5
+ENCODER_LR = 1e-5  # 5x lower — prevents destroying pretrained features on first unfreeze step
 
-ENCODER_LR = 1e-5
-CLASSIFIER_LR = 1e-4
+USE_MIXUP = True
+MIXUP_ALPHA = 0.2
+MIXUP_START_EPOCH = 8  # keep mixup off for first 3 full-phase epochs (epochs 6-7)
+
+FOCAL_GAMMA = 2.0

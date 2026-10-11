@@ -31,7 +31,7 @@ def load_v1_predictions(v1_csv_path: Path, label_map_path: Path) -> pd.DataFrame
         raise ValueError(
             f"{n_bad} v1 label indices could not be mapped to a class name via "
             f"{label_map_path} - v1 and the current label_map.json may disagree "
-            f"on class indexing. Check that both use the same label_map.json."
+            f"on class indexing."
         )
 
     df["v1_correct"] = df["v1_true_name"] == df["v1_pred_name"]
@@ -39,67 +39,73 @@ def load_v1_predictions(v1_csv_path: Path, label_map_path: Path) -> pd.DataFrame
 
 
 def load_v2_predictions(v2_csv_path: Path) -> pd.DataFrame:
-    """Load v2's evaluation/mc_dropout_predictions.csv (already uses class
-    name strings and already has a `correct` column)."""
     df = pd.read_csv(v2_csv_path)
     required_cols = {"filepath", "true_label", "predicted_label", "correct"}
     missing = required_cols - set(df.columns)
     if missing:
         raise ValueError(
             f"v2 predictions CSV is missing required columns: {missing}. "
-            f"Make sure evaluate.py was run with test_csv_path set (adds the "
-            f"filepath column) - see evaluate.py's run_mc_dropout_evaluation."
+            f"Make sure evaluate.py was run with test_csv_path set."
         )
     return df.rename(columns={
         "true_label": "v2_true_name", "predicted_label": "v2_pred_name", "correct": "v2_correct",
     })[["filepath", "v2_true_name", "v2_pred_name", "v2_correct"]]
 
 
-def pair_predictions(v1_df: pd.DataFrame, v2_df: pd.DataFrame) -> pd.DataFrame:
-    """Inner-join v1 and v2 predictions on `filepath`. Raises if the join
-    drops samples, rather than silently comparing a mismatched subset."""
+def pair_predictions(v1_df: pd.DataFrame, v2_df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Inner-join on filepath using the intersection. v1 and v2 may have
+    different test-set sizes — we compare only shared samples.
+
+    Returns (merged_df, info_dict) where info_dict reports how many were
+    excluded from each side.
+    """
     merged = v1_df.merge(v2_df, on="filepath", how="inner")
 
-    if len(merged) != len(v1_df) or len(merged) != len(v2_df):
+    if len(merged) == 0:
         raise ValueError(
-            f"Filepath join produced {len(merged)} matched samples, but v1 has "
-            f"{len(v1_df)} and v2 has {len(v2_df)}. The two test sets may not be "
-            f"identical - McNemar's test requires the SAME test samples for both "
-            f"models. Investigate the mismatch before trusting any comparison below."
+            "Filepath join produced 0 matched samples. "
+            "v1 and v2 appear to have no overlap in their test sets."
         )
 
+    info = {
+        "n_shared": len(merged),
+        "n_v1_total": len(v1_df),
+        "n_v2_total": len(v2_df),
+        "n_v1_dropped": len(v1_df) - len(merged),
+        "n_v2_dropped": len(v2_df) - len(merged),
+    }
+    if info["n_v1_dropped"] > 0 or info["n_v2_dropped"] > 0:
+        print(
+            f"  Using {info['n_shared']} shared samples "
+            f"(v1={info['n_v1_total']}, v2={info['n_v2_total']}; "
+            f"dropped {info['n_v1_dropped']} v1-only, {info['n_v2_dropped']} v2-only)."
+        )
 
     label_mismatch = merged["v1_true_name"] != merged["v2_true_name"]
     if label_mismatch.any():
         raise ValueError(
             f"{label_mismatch.sum()} samples have DIFFERENT true labels between "
-            f"v1 and v2 for the same filepath - this indicates a label_map.json "
-            f"inconsistency between the two evaluation runs, not a real modeling "
-            f"difference. Fix the label mapping before comparing."
+            f"v1 and v2 for the same filepath — label_map.json inconsistency. "
+            f"Fix the mapping before comparing."
         )
 
-    return merged
+    return merged, info
 
 
 def run_mcnemar_test(merged: pd.DataFrame) -> dict:
-    """McNemar's test on the 2x2 contingency table of (v1 correct/incorrect)
-    x (v2 correct/incorrect), restricted to the samples where the two
-    models DISAGREE - that disagreement is what the test actually examines.
-    """
-    both_correct = ((merged["v1_correct"]) & (merged["v2_correct"])).sum()
-    v1_only_correct = ((merged["v1_correct"]) & (~merged["v2_correct"])).sum()
-    v2_only_correct = ((~merged["v1_correct"]) & (merged["v2_correct"])).sum()
-    both_wrong = ((~merged["v1_correct"]) & (~merged["v2_correct"])).sum()
+    both_correct = (merged["v1_correct"] & merged["v2_correct"]).sum()
+    v1_only = (merged["v1_correct"] & ~merged["v2_correct"]).sum()
+    v2_only = (~merged["v1_correct"] & merged["v2_correct"]).sum()
+    both_wrong = (~merged["v1_correct"] & ~merged["v2_correct"]).sum()
 
-    contingency_table = [[both_correct, v1_only_correct], [v2_only_correct, both_wrong]]
-
-    result = mcnemar(contingency_table, exact=True)
+    contingency = [[int(both_correct), int(v1_only)], [int(v2_only), int(both_wrong)]]
+    result = mcnemar(contingency, exact=True)
 
     return {
-        "contingency_table": contingency_table,
+        "contingency_table": contingency,
         "both_correct": int(both_correct),
-        "v1_only_correct": int(v1_only_correct),
-        "v2_only_correct": int(v2_only_correct),
+        "v1_only_correct": int(v1_only),
+        "v2_only_correct": int(v2_only),
         "both_wrong": int(both_wrong),
         "statistic": result.statistic,
         "p_value": result.pvalue,
@@ -142,16 +148,17 @@ def main() -> None:
     print("Loading predictions...")
     v1_df = load_v1_predictions(v1_csv_path, label_map_path)
     v2_df = load_v2_predictions(v2_csv_path)
-    merged = pair_predictions(v1_df, v2_df)
-    print(f"Matched {len(merged)} samples between v1 and v2 (filepath-paired).\n")
+    merged, pair_info = pair_predictions(v1_df, v2_df)
+
+    alpha = 0.05
 
     print("=" * 60)
-    print("OVERALL ACCURACY")
+    print("OVERALL ACCURACY (on shared samples)")
     print("=" * 60)
     v1_acc = merged["v1_correct"].mean()
     v2_acc = merged["v2_correct"].mean()
-    print(f"v1 accuracy: {v1_acc:.4f}")
-    print(f"v2 accuracy: {v2_acc:.4f}")
+    print(f"v1 accuracy: {v1_acc:.4f}  ({pair_info['n_v1_total']} total, {pair_info['n_v1_dropped']} excluded)")
+    print(f"v2 accuracy: {v2_acc:.4f}  ({pair_info['n_v2_total']} total, {pair_info['n_v2_dropped']} excluded)")
     print(f"Difference (v2 - v1): {v2_acc - v1_acc:+.4f}\n")
 
     print("=" * 60)
@@ -164,12 +171,11 @@ def main() -> None:
     print(f"Both wrong         : {mcnemar_result['both_wrong']}")
     print(f"\nMcNemar statistic  : {mcnemar_result['statistic']:.4f}")
     print(f"p-value            : {mcnemar_result['p_value']:.6f}")
-    alpha = 0.05
     if mcnemar_result["p_value"] < alpha:
         favored = "v2" if mcnemar_result["v2_only_correct"] > mcnemar_result["v1_only_correct"] else "v1"
-        print(f"-> Statistically significant difference at alpha={alpha} (favors {favored}).")
+        print(f"-> Statistically significant (p < {alpha}); favors {favored}.")
     else:
-        print(f"-> NOT statistically significant at alpha={alpha} - cannot conclude the models differ.")
+        print(f"-> NOT statistically significant (p >= {alpha}).")
 
     print("\n" + "=" * 60)
     print("PAIRED T-TEST ON PER-CLASS F1 SCORES")
@@ -180,9 +186,9 @@ def main() -> None:
     print(f"t-statistic: {ttest_result['t_statistic']:.4f}")
     print(f"p-value    : {ttest_result['p_value']:.6f}")
     if ttest_result["p_value"] < alpha:
-        print(f"-> Statistically significant difference in per-class F1 at alpha={alpha}.")
+        print(f"-> Statistically significant (p < {alpha}).")
     else:
-        print(f"-> NOT statistically significant at alpha={alpha}.")
+        print(f"-> NOT statistically significant (p >= {alpha}).")
 
     per_class_path = output_dir / "v1_vs_v2_per_class_f1.csv"
     ttest_result["per_class_df"].to_csv(per_class_path, index=False)

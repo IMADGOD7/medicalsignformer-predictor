@@ -18,8 +18,8 @@ OUTDIR = ROOT / "data" / "processed"
 OUTDIR.mkdir(parents=True, exist_ok=True)
 
 TRAIN_RATIO = 0.80
-VAL_RATIO = 0.10
-TEST_RATIO = 0.10
+VAL_RATIO = 0.10    # carved from train portion, not from test
+TEST_RATIO = 0.20
 RANDOM_SEED = 42
 
 if not INDEX.exists():
@@ -34,35 +34,38 @@ if "label" not in df.columns:
 
 print(f"Total samples: {len(df)}, total classes: {df['label'].nunique()}")
 print(
-    f"Target split: {TRAIN_RATIO:.0%} train / {VAL_RATIO:.0%} val / "
-    f"{TEST_RATIO:.0%} test, stratified by class, signers NOT kept disjoint.\n"
+    f"Target split: {TRAIN_RATIO:.0%} train+val / {TEST_RATIO:.0%} test (stratified by class)\n"
 )
 
-# First split: train vs temp (val+test), stratified by label.
-temp_size = VAL_RATIO + TEST_RATIO
-train_df, temp_df = train_test_split(
+# First split: (train+val) vs test  →  80% / 20%
+trainval_df, test_df = train_test_split(
     df,
-    test_size=temp_size,
+    test_size=TEST_RATIO,
     stratify=df["label"],
     random_state=RANDOM_SEED,
 )
 
-# Second split: temp -> val/test, stratified by label, preserving the
-# relative val:test ratio within the temp portion.
-val_share_of_temp = VAL_RATIO / temp_size
-val_df, test_df = train_test_split(
-    temp_df,
-    test_size=(1 - val_share_of_temp),
-    stratify=temp_df["label"],
+# Second split: train vs val  →  carve 10% of total (= 12.5% of trainval)
+val_share_of_trainval = VAL_RATIO / (1.0 - TEST_RATIO)   # 0.10 / 0.80 = 0.125
+train_df, val_df = train_test_split(
+    trainval_df,
+    test_size=val_share_of_trainval,
+    stratify=trainval_df["label"],
     random_state=RANDOM_SEED,
 )
 
 train_file = OUTDIR / "train.csv"
-val_file = OUTDIR / "val.csv"
-test_file = OUTDIR / "test.csv"
+val_file   = OUTDIR / "val.csv"
+test_file  = OUTDIR / "test.csv"
 train_df.to_csv(train_file, index=False)
-val_df.to_csv(val_file, index=False)
-test_df.to_csv(test_file, index=False)
+val_df.to_csv(val_file,     index=False)
+test_df.to_csv(test_file,   index=False)
+
+# Save label map so config.py and downstream scripts can load it
+all_diseases = sorted(df["disease"].unique().tolist())
+label_map = {disease: int(df.loc[df["disease"] == disease, "label"].iloc[0]) for disease in all_diseases}
+with open(OUTDIR / "label_map.json", "w") as f:
+    json.dump(label_map, f, indent=2)
 
 print("=" * 60)
 print("RANDOM SPLIT SUMMARY (stratified by class, signers mixed)")

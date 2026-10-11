@@ -66,6 +66,8 @@ events.out.tfevents.*
 checkpoints/*.pth
 checkpoints/*.pt
 checkpoints/*.ckpt
+/checkpoints1/
+/checkpointsperclass/
 
 # Keep folder structure
 !checkpoints/.gitkeep
@@ -80,6 +82,21 @@ evaluation/*.pdf
 
 # Keep folder structure
 !evaluation/.gitkeep
+
+# ==========================================================
+# Local Data and Experiment Outputs
+# ==========================================================
+
+/landmarks/
+/landmarks_kaggle/
+/dataset_index.csv
+/msl_medical_*.csv
+/data/processed/*_kaggle.csv
+/evaluation_kaggle/
+/evaluationbest/
+/finetune_log.csv
+/pretrain_log.csv
+/v1_predictions.csv
 
 # ==========================================================
 # Temporary Files

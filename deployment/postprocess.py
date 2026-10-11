@@ -7,8 +7,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Deque, Optional, Tuple
 
-# --- Same import-fallback pattern as inference.py, so this module works
-# both as part of the `deployment` package and run standalone. ---
 try:
     from inference import InferenceResult
 except ImportError:
@@ -20,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class SmoothedResult:
-    """Display-ready result produced by TemporalSmoother.update()."""
-
     display_label: Optional[str]
     agreement_ratio: float
     is_stable: bool
@@ -49,24 +45,20 @@ class TemporalSmoother:
         self.window_size = window_size
         self.min_agreement_ratio = min_agreement_ratio
         self.confidence_threshold = confidence_threshold
-
-        # Each entry: (class_index, class_label). Only accepted predictions are stored.
         self._history: Deque[Tuple[int, str]] = deque(maxlen=window_size)
 
-        logger.info(
-            "TemporalSmoother initialized: window_size=%d, min_agreement_ratio=%.2f, confidence_threshold=%.2f",
-            window_size, min_agreement_ratio, confidence_threshold,
-        )
-
     def update(self, result: InferenceResult) -> SmoothedResult:
-        accepted = result.confidence >= self.confidence_threshold
+        # Use calibrated confidence (top1 - top2 margin) for thresholding.
+        # Raw softmax probability is unreliable for multiclass with FocalLoss.
+        eff_confidence = getattr(result, "calibrated_confidence", result.confidence)
+        accepted = eff_confidence >= self.confidence_threshold
 
         if accepted:
             self._history.append((result.prediction, result.predicted_label))
         else:
             logger.debug(
-                "Rejected window: confidence=%.4f < threshold=%.2f (label='%s')",
-                result.confidence, self.confidence_threshold, result.predicted_label,
+                "Rejected window: calibrated_conf=%.4f < threshold=%.2f (label='%s')",
+                eff_confidence, self.confidence_threshold, result.predicted_label,
             )
 
         if not self._history:
@@ -96,14 +88,9 @@ class TemporalSmoother:
         )
 
     def reset(self) -> None:
-        """Clear all smoothing history. Call this on scene changes (e.g. the
-        caller detects hands left frame for N seconds) to avoid a new
-        gesture's early votes being diluted by the previous gesture's tail."""
         self._history.clear()
-        logger.debug("TemporalSmoother history cleared.")
 
     def __len__(self) -> int:
-        """Number of accepted predictions currently held in the smoothing window."""
         return len(self._history)
 
 
@@ -112,13 +99,11 @@ class TemporalSmoother:
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-
     print("=" * 70)
     print("postprocess.py - standalone verification")
     print("=" * 70)
 
-    def _fake_result(prediction: int, label: str, confidence: float) -> InferenceResult:
-        """Build a minimal InferenceResult for testing without running the model."""
+    def _fake_result(prediction: int, label: str, confidence: float, calibrated: Optional[float] = None) -> InferenceResult:
         import numpy as np
         num_classes = 48
         probs = np.zeros(num_classes, dtype=np.float32)
@@ -126,15 +111,17 @@ if __name__ == "__main__":
         remaining = (1.0 - confidence) / max(num_classes - 1, 1)
         probs += remaining
         probs[prediction] = confidence
+        if calibrated is None:
+            calibrated = confidence  # default: clear winner
         return InferenceResult(
             prediction=prediction,
             predicted_label=label,
             confidence=confidence,
+            calibrated_confidence=calibrated,
             probabilities=probs,
             latency_ms=1.0,
         )
 
-    # --- Test 1: constructor validation ---
     for bad_kwargs, bad_field in [
         ({"window_size": 0}, "window_size"),
         ({"min_agreement_ratio": 0.0}, "min_agreement_ratio"),
@@ -149,26 +136,32 @@ if __name__ == "__main__":
             pass
     print("[PASS] Constructor validation rejects out-of-range parameters.")
 
-    # --- Test 2: empty history returns unstable, display_label=None ---
     smoother = TemporalSmoother(window_size=5, min_agreement_ratio=0.6, confidence_threshold=0.5)
-    r = smoother.update(_fake_result(3, "Fever", confidence=0.3))  # below threshold -> rejected
+    r = smoother.update(_fake_result(3, "Fever", confidence=0.3))
     assert r.accepted is False
     assert r.is_stable is False
     assert r.display_label is None
     assert len(smoother) == 0
     print("[PASS] Below-threshold prediction is rejected and does not populate history.")
 
-    # --- Test 3: single accepted prediction below agreement ratio isn't "stable" until it's the whole buffer ---
     smoother.reset()
     r = smoother.update(_fake_result(3, "Fever", confidence=0.9))
     assert r.accepted is True
     assert len(smoother) == 1
-    assert r.agreement_ratio == 1.0  # 1/1 votes agree with itself
+    assert r.agreement_ratio == 1.0
     assert r.is_stable is True
     assert r.display_label == "Fever"
     print("[PASS] A single accepted vote is trivially its own majority (1/1).")
 
-    # --- Test 4: majority vote resolves correctly with mixed labels ---
+    # Test calibrated confidence: high raw confidence but low margin -> rejected
+    smoother.reset()
+    # Two close classes: top1=0.52, top2=0.48 -> calibrated = 0.04 < 0.5 threshold
+    r_close = smoother.update(_fake_result(3, "Fever", confidence=0.52, calibrated=0.04))
+    assert r_close.accepted is False
+    assert r_close.display_label is None
+    assert len(smoother) == 0
+    print("[PASS] Close prediction (calibrated_conf=0.04 < 0.5) correctly rejected.")
+
     smoother.reset()
     sequence = [
         ("Fever", 0.9), ("Fever", 0.85), ("Cold", 0.7),
@@ -177,15 +170,13 @@ if __name__ == "__main__":
     last = None
     for label, conf in sequence:
         last = smoother.update(_fake_result(hash(label) % 48, label, conf))
-    # 4/5 = 0.8 agreement on "Fever" >= 0.6 threshold -> stable, displays "Fever"
     assert last.agreement_ratio == 0.8, f"Expected 0.8, got {last.agreement_ratio}"
     assert last.is_stable is True
     assert last.display_label == "Fever"
     print(f"[PASS] Majority vote correctly resolves to 'Fever' at agreement_ratio={last.agreement_ratio}.")
 
-    # --- Test 5: insufficient agreement -> not stable, display_label=None ---
     smoother.reset()
-    sequence = [("A", 0.9), ("B", 0.9), ("C", 0.9), ("D", 0.9), ("E", 0.9)]  # all different, 1/5 = 0.2 agreement
+    sequence = [("A", 0.9), ("B", 0.9), ("C", 0.9), ("D", 0.9), ("E", 0.9)]
     last = None
     for i, (label, conf) in enumerate(sequence):
         last = smoother.update(_fake_result(i, label, conf))
@@ -194,33 +185,29 @@ if __name__ == "__main__":
     assert last.display_label is None
     print("[PASS] Low agreement (0.2 < 0.6) correctly yields is_stable=False, display_label=None.")
 
-    # --- Test 6: sliding window drops old votes (maxlen behavior) ---
     smoother = TemporalSmoother(window_size=3, min_agreement_ratio=0.6, confidence_threshold=0.5)
     smoother.update(_fake_result(1, "Cold", 0.9))
     smoother.update(_fake_result(1, "Cold", 0.9))
     smoother.update(_fake_result(1, "Cold", 0.9))
     assert len(smoother) == 3
-    r = smoother.update(_fake_result(2, "Flu", 0.9))  # pushes out the oldest "Cold"
-    assert len(smoother) == 3, "deque(maxlen=3) should have evicted the oldest entry."
-    # buffer is now [Cold, Cold, Flu] -> 2/3 = 0.667 agreement on Cold, still stable
+    r = smoother.update(_fake_result(2, "Flu", 0.9))
+    assert len(smoother) == 3
     assert r.agreement_ratio > 0.6
     assert r.display_label == "Cold"
     print("[PASS] Sliding window correctly evicts oldest votes once window_size is exceeded.")
 
-    # --- Test 7: reset() clears history ---
     smoother.reset()
     assert len(smoother) == 0
-    r = smoother.update(_fake_result(0, "Allergies", 0.3))  # below threshold, still rejected after reset
+    r = smoother.update(_fake_result(0, "Allergies", 0.3))
     assert len(smoother) == 0
     print("[PASS] reset() clears history correctly.")
 
-    # --- Test 8: window_size=1 behaves as pure threshold pass-through ---
     smoother = TemporalSmoother(window_size=1, min_agreement_ratio=0.6, confidence_threshold=0.5)
     r1 = smoother.update(_fake_result(5, "Cough", 0.9))
     assert r1.display_label == "Cough"
     r2 = smoother.update(_fake_result(6, "Sneeze", 0.9))
-    assert r2.display_label == "Sneeze", "window_size=1 should immediately reflect the newest accepted vote."
-    print("[PASS] window_size=1 correctly behaves as a pure threshold pass-through with no smoothing lag.")
+    assert r2.display_label == "Sneeze"
+    print("[PASS] window_size=1 correctly behaves as a pure threshold pass-through.")
 
     print("\n" + "=" * 70)
     print("ALL CHECKS PASSED")

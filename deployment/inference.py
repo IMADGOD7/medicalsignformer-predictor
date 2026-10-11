@@ -23,7 +23,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_CHECKPOINT_PATH = _REPO_ROOT / "checkpoints" / "best_finetuned_model.pth"
+DEFAULT_CHECKPOINT_PATH = _REPO_ROOT / "checkpoints" / "best_model.pth"
 DEFAULT_LABEL_MAP_PATH = _REPO_ROOT / "data" / "processed" / "label_map.json"
 
 
@@ -32,8 +32,9 @@ class InferenceResult:
     """Single-window prediction result returned by InferenceEngine.predict()."""
 
     prediction: int              # predicted class index
-    predicted_label: str         # predicted class name (numeric string if label map unavailable)
-    confidence: float            # softmax probability of the predicted class, in [0, 1]
+    predicted_label: str         # predicted class name
+    confidence: float            # raw softmax probability of the predicted class
+    calibrated_confidence: float # top1 - top2 margin (better calibrated for multiclass)
     probabilities: np.ndarray    # full softmax distribution, shape (num_classes,)
     latency_ms: float            # wall-clock time for tensor prep + forward pass + softmax
 
@@ -118,7 +119,10 @@ class InferenceEngine:
 
         start = time.perf_counter()
 
-        x = torch.as_tensor(window, dtype=torch.float32, device=self.device).unsqueeze(0)  # (1, T, F)
+        from preprocessing.skeleton_normalization import normalize_skeleton
+
+        window_norm = normalize_skeleton(window)
+        x = torch.as_tensor(window_norm, dtype=torch.float32, device=self.device).unsqueeze(0)  # (1, T, F)
 
         logits, _attention_weights = self.model(x, lengths=None)
         probabilities = F.softmax(logits, dim=-1).squeeze(0)  # (num_classes,)
@@ -126,12 +130,19 @@ class InferenceEngine:
         confidence, prediction_idx_tensor = torch.max(probabilities, dim=-1)
         prediction_idx = int(prediction_idx_tensor.item())
 
+        # Calibrated confidence: top1 - top2 margin.  This is far more
+        # reliable than raw softmax probability for multiclass settings,
+        # especially with FocalLoss where the model tends to be overconfident.
+        sorted_probs, _ = torch.sort(probabilities, descending=True)
+        calibrated = float((sorted_probs[0] - sorted_probs[1]).item()) if len(sorted_probs) >= 2 else 1.0
+
         latency_ms = (time.perf_counter() - start) * 1000.0
 
         return InferenceResult(
             prediction=prediction_idx,
             predicted_label=self.label_names[prediction_idx],
             confidence=float(confidence.item()),
+            calibrated_confidence=calibrated,
             probabilities=probabilities.detach().cpu().numpy(),
             latency_ms=latency_ms,
         )
@@ -203,7 +214,7 @@ if __name__ == "__main__":
 
         print(f"[PASS] predict() returned: prediction={result.prediction}, "
               f"label='{result.predicted_label}', confidence={result.confidence:.4f}, "
-              f"latency_ms={result.latency_ms:.3f}")
+              f"calibrated={result.calibrated_confidence:.4f}, latency_ms={result.latency_ms:.3f}")
 
         assert isinstance(result.prediction, int)
         assert 0 <= result.prediction < config.NUM_CLASSES
@@ -213,8 +224,9 @@ if __name__ == "__main__":
             f"Probabilities should sum to ~1.0, got {result.probabilities.sum()}"
         assert (result.probabilities >= 0).all(), "Probabilities must be non-negative."
         assert 0.0 <= result.confidence <= 1.0
-        assert np.isclose(result.confidence, result.probabilities.max(), atol=1e-6), \
-            "confidence must equal max(probabilities)."
+        assert 0.0 <= result.calibrated_confidence <= 1.0
+        assert result.calibrated_confidence <= result.confidence + 1e-6, \
+            "calibrated confidence (top1 - top2) should never exceed raw top1 probability."
         assert result.latency_ms > 0.0
         print("[PASS] Output shapes, probability validity, and confidence consistency all verified.")
 

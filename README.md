@@ -1,6 +1,6 @@
 # MedicalSignFormer
 
-A Transformer-State Space based framework for **Medical Sign Language Recognition** using **MediaPipe Holistic landmarks**, **Adaptive Graph Attention Networks**, **Motion Feature Fusion**, **Graph-aware Masked Temporal Pretraining**, **Mamba Temporal Encoder**, **Temporal Attention Pooling**, and **Monte Carlo Dropout Uncertainty Estimation**.
+A Transformer-state-space framework for **medical sign recognition** from video-derived **MediaPipe Holistic landmarks**. The model combines graph attention, motion-feature fusion, a Mamba temporal encoder, temporal attention pooling, and a classification head. Training uses contrastive pretraining followed by supervised fine-tuning.
 
 ---
 
@@ -8,7 +8,7 @@ A Transformer-State Space based framework for **Medical Sign Language Recognitio
 
 MedicalSignFormer is a two-stage deep learning framework designed for medical sign language recognition.
 
-The framework first learns general spatio-temporal landmark representations through **self-supervised masked pretraining**, followed by **supervised end-to-end fine-tuning** for disease classification.
+The framework first learns landmark-sequence representations through **self-supervised contrastive pretraining** on augmented views, followed by **supervised fine-tuning** for 48-class sign classification.
 
 The complete pipeline consists of:
 
@@ -52,7 +52,7 @@ Monte Carlo Dropout
 
 - Adaptive Graph Attention Network
 - Motion Feature Fusion
-- Graph-aware Masked Temporal Pretraining
+- Contrastive self-supervised pretraining
 - Mamba Temporal Encoder
 - Temporal Attention Pooling
 - Monte Carlo Dropout Uncertainty Estimation
@@ -93,6 +93,7 @@ MedicalSignFormer/
 ├── evaluate.py
 ├── requirements.txt
 ├── .gitignore
+├── deployment/
 └── README.md
 ```
 
@@ -138,6 +139,12 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+The model also requires **PyTorch**, which is not included in `requirements.txt`.
+Install the PyTorch build appropriate for your operating system and CPU/GPU from
+the [official PyTorch installation selector](https://pytorch.org/get-started/locally/).
+The optional computational profiling script `computational_comparison.py` also
+requires `thop`.
+
 ---
 
 # Dataset
@@ -173,11 +180,11 @@ The framework follows a two-stage training strategy.
 
 ---
 
-## Stage 1 — Self-Supervised Pretraining
+## Stage 1 — Contrastive Self-Supervised Pretraining
 
-The encoder is trained without using disease labels.
-
-Masked temporal segments are reconstructed to learn meaningful spatial-temporal representations.
+The encoder is trained without using disease labels. Two augmented views of each
+landmark sequence are created using time warping, small noise, and temporal
+dropout; a contrastive loss brings representations of the paired views together.
 
 Run:
 
@@ -210,7 +217,7 @@ Output:
 ```
 checkpoints/
 
-└── best_finetuned_model.pth
+└── best_model.pth
 ```
 
 ---
@@ -266,6 +273,42 @@ Disease Prediction
               ▼
 Monte Carlo Dropout
 ```
+
+---
+
+# Local Webcam Demo
+
+The deployment entry point runs a local OpenCV webcam window; it is not a hosted
+web application. From the project root, connect a webcam and make the trained
+checkpoint available at `checkpoints/best_model.pth`. Class names are loaded
+from `data/processed/label_map.json`.
+
+Windows:
+
+```powershell
+.venv\Scripts\python.exe deployment\app.py
+```
+
+Linux/macOS:
+
+```bash
+python deployment/app.py
+```
+
+Press `q` or `Esc` in the display window to exit. The checkpoint is ignored by
+Git, so distribute it separately and only where you have permission to share it.
+
+---
+
+# Evaluation Notes
+
+The checked-in main test report records 95.56% accuracy and 0.951 macro-F1 on
+1,396 samples. The active train, validation, and test CSVs share signers, so this
+result does not establish performance on unseen signers. Separate mapped
+MSL/Kaggle evaluation artifacts report about 9–11% accuracy on 76 samples; treat
+these as cross-dataset results, not as comparable to the main test score.
+Performance varies by class. This project is a research prototype, not a medical
+diagnostic system.
 
 ---
 
@@ -348,3 +391,12 @@ If you use this project in your research, please cite the repository.
 
 This project is released under the MIT License.
 
+---
+
+# Author
+
+**team**
+
+Computer Science & Engineering
+
+MedicalSignFormer Research Project

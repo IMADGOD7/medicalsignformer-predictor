@@ -1,26 +1,3 @@
-"""
-ui.py
-=====
-
-Final stage of the deployment pipeline: renders the smoothed prediction onto
-the webcam frame and manages the on-screen display window.
-
-    SmoothedResult (+ optional raw InferenceResult, + optional FPS)
-        -> draw_overlay() -> annotated frame -> DisplayWindow.show()
-
-Split into two independent pieces on purpose:
-    - draw_overlay(): a pure image transform (frame in, frame out). No GUI
-      dependency, so it is fully unit-testable without an X server/display -
-      this sandbox's verification run exercises it directly.
-    - DisplayWindow: an actual OS-level resource (a GUI window), so THIS is
-      the module in the deployment package where a context manager is load-
-      bearing rather than just stylistic symmetry.
-
-This module does not decide *whether* a prediction is stable (that's
-postprocess.py) or *what* the prediction is (that's inference.py) - it only
-decides how to show the result it's given.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -45,6 +22,9 @@ logger = logging.getLogger(__name__)
 # --- BGR colors (OpenCV convention, not RGB) ---
 COLOR_STABLE = (60, 200, 60)
 COLOR_UNSTABLE = (0, 200, 255)
+COLOR_RECORDING = (0, 140, 255)
+COLOR_PROCESSING = (255, 200, 0)
+COLOR_IDLE = (180, 180, 180)
 COLOR_DEBUG = (200, 200, 200)
 COLOR_FPS = (255, 255, 255)
 COLOR_BG = (0, 0, 0)
@@ -68,9 +48,13 @@ class OverlayConfig:
 
 def draw_overlay(
     frame: np.ndarray,
-    smoothed: SmoothedResult,
+    smoothed: Optional[SmoothedResult] = None,
     raw: Optional[InferenceResult] = None,
     fps: Optional[float] = None,
+    gesture_state: Optional[str] = None,
+    recorded_frames: int = 0,
+    motion_score: Optional[float] = None,
+    motion_threshold: Optional[float] = None,
     config: OverlayConfig = OverlayConfig(),
     copy: bool = False,
 ) -> np.ndarray:
@@ -81,29 +65,104 @@ def draw_overlay(
     x = config.margin
     y = config.margin
 
-    # --- Main prediction line ---
-    if smoothed.is_stable and smoothed.display_label is not None:
-        main_text = f"{smoothed.display_label}  ({smoothed.agreement_ratio * 100:.0f}%)"
+    # --- 1. System FSM State Line ---
+    if gesture_state is not None:
+        state_upper = str(gesture_state).upper()
+        if "RECORDING" in state_upper:
+            state_text = f"RECORDING ({recorded_frames} frames)"
+            state_color = COLOR_RECORDING
+        elif "PROCESSING" in state_upper:
+            state_text = "PROCESSING GESTURE..."
+            state_color = COLOR_PROCESSING
+        elif "COOLDOWN" in state_upper:
+            state_text = "COOLDOWN / PREPARING..."
+            state_color = COLOR_IDLE
+        else:
+            state_text = "WAITING FOR GESTURE..."
+            state_color = COLOR_IDLE
+
+        (st_w, st_h), st_baseline = cv2.getTextSize(
+            state_text, config.font, config.debug_scale * 1.3, config.main_thickness
+        )
+        y += st_h
+        cv2.rectangle(
+            out,
+            (x - 6, y - st_h - 4),
+            (x + st_w + 6, y + st_baseline + 4),
+            COLOR_BG,
+            thickness=-1,
+        )
+        cv2.putText(
+            out,
+            state_text,
+            (x, y),
+            config.font,
+            config.debug_scale * 1.3,
+            state_color,
+            config.main_thickness,
+            cv2.LINE_AA,
+        )
+        y += st_baseline + config.line_gap
+
+    # --- 2. Live Motion Gauge Line ---
+    if motion_score is not None and motion_threshold is not None:
+        is_above = motion_score >= motion_threshold
+        m_color = (0, 255, 0) if is_above else (180, 180, 180)
+        m_text = f"Motion: {motion_score:.4f}  [Thresh: {motion_threshold:.4f}]"
+
+        (m_w, m_h), m_base = cv2.getTextSize(
+            m_text, config.font, config.debug_scale, config.debug_thickness
+        )
+        y += m_h
+        cv2.rectangle(
+            out,
+            (x - 4, y - m_h - 4),
+            (x + m_w + 4, y + m_base + 4),
+            COLOR_BG,
+            thickness=-1,
+        )
+        cv2.putText(
+            out,
+            m_text,
+            (x, y),
+            config.font,
+            config.debug_scale,
+            m_color,
+            config.debug_thickness,
+            cv2.LINE_AA,
+        )
+        y += m_base + config.line_gap
+
+    # --- 3. Prediction Line ---
+    if smoothed is not None and (smoothed.is_stable or smoothed.display_label is not None):
+        main_text = f"Prediction: {smoothed.display_label} ({smoothed.raw_confidence * 100:.0f}%)"
         main_color = COLOR_STABLE
-    else:
+    elif raw is not None:
+        display_conf = raw.confidence
+        main_text = f"Prediction: {raw.predicted_label} ({display_conf * 100:.0f}%)"
+        main_color = COLOR_STABLE
+    elif gesture_state is None and smoothed is not None:
         main_text = RECOGNIZING_TEXT
         main_color = COLOR_UNSTABLE
+    else:
+        main_text = None
 
-    (text_w, text_h), baseline = cv2.getTextSize(
-        main_text, config.font, config.main_scale, config.main_thickness
-    )
-    y += text_h
-    cv2.rectangle(
-        out,
-        (x - 6, y - text_h - 6),
-        (x + text_w + 6, y + baseline + 6),
-        COLOR_BG,
-        thickness=-1,
-    )
-    cv2.putText(out, main_text, (x, y), config.font, config.main_scale, main_color, config.main_thickness, cv2.LINE_AA)
-    y += baseline + config.line_gap
+    if main_text is not None:
+        (text_w, text_h), baseline = cv2.getTextSize(
+            main_text, config.font, config.main_scale, config.main_thickness
+        )
+        y += text_h
+        cv2.rectangle(
+            out,
+            (x - 6, y - text_h - 6),
+            (x + text_w + 6, y + baseline + 6),
+            COLOR_BG,
+            thickness=-1,
+        )
+        cv2.putText(out, main_text, (x, y), config.font, config.main_scale, main_color, config.main_thickness, cv2.LINE_AA)
+        y += baseline + config.line_gap
 
-    # --- Raw per-window debug line (secondary, small) ---
+    # --- 3. Raw per-window debug line (secondary, small) ---
     if raw is not None:
         debug_text = f"raw: {raw.predicted_label} ({raw.confidence * 100:.1f}%)  {raw.latency_ms:.1f}ms"
         (dbg_w, dbg_h), dbg_baseline = cv2.getTextSize(
@@ -122,7 +181,7 @@ def draw_overlay(
         )
         y += dbg_baseline + config.line_gap
 
-    # --- FPS counter, top-right corner ---
+    # --- 4. FPS counter, top-right corner ---
     if fps is not None:
         fps_text = f"{fps:.1f} FPS"
         (fps_w, fps_h), fps_baseline = cv2.getTextSize(
@@ -143,12 +202,7 @@ def draw_overlay(
 
 
 class DisplayWindow:
-    """
-    Owns an actual OpenCV GUI window (a real OS-level resource, unlike
-    InferenceEngine). Always use as a context manager so the window is
-    guaranteed to be destroyed on exit, including on exceptions.
-    """
-
+    """Context manager for an OpenCV display window."""
     QUIT_KEYS = frozenset({ord("q"), 27})  # 'q' or ESC
 
     def __init__(self, window_name: str = "MedicalSignFormerV2 - Live Recognition") -> None:
@@ -162,15 +216,6 @@ class DisplayWindow:
         return self
 
     def show(self, frame: np.ndarray, wait_ms: int = 1) -> int:
-        """
-        Show `frame` and poll for a keypress.
-
-        Returns:
-            The pressed key code (masked to 8 bits), or -1 if none.
-
-        Raises:
-            RuntimeError: if called before entering the context manager.
-        """
         if not self._opened:
             raise RuntimeError("DisplayWindow.show() called before __enter__ - use 'with DisplayWindow(...) as w:'.")
         cv2.imshow(self.window_name, frame)

@@ -178,7 +178,7 @@ def main() -> None:
         embed_dim=config.EMBED_DIM, num_classes=config.NUM_CLASSES, sequence_length=config.SEQUENCE_LENGTH,
     ).to(device)
 
-    checkpoint_path = CHECKPOINT_DIR / "best_finetuned_model.pth"
+    checkpoint_path = CHECKPOINT_DIR / "best_model.pth"
     if not checkpoint_path.exists():
         raise FileNotFoundError(
             f"{checkpoint_path} not found - run train_finetune.py first to produce a trained model."

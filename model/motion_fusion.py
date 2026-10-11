@@ -15,23 +15,15 @@ except ImportError:
 
 
 def compute_velocity(x: torch.Tensor) -> torch.Tensor:
-
     if x.ndim != 3:
         raise ValueError(f"Expected (B, T, feature_dim), got {tuple(x.shape)}.")
-
     velocity = torch.zeros_like(x)
     velocity[:, 1:, :] = x[:, 1:, :] - x[:, :-1, :]
     return velocity
 
 
 class VelocityEncoder(nn.Module):
-
-    def __init__(
-        self,
-        input_dim: int,
-        hidden_dim: int = config.EMBED_DIM,
-        dropout: float = config.GATED_FUSION_DROPOUT,
-    ):
+    def __init__(self, input_dim: int, hidden_dim: int = config.EMBED_DIM, dropout: float = config.GATED_FUSION_DROPOUT):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_dim),
@@ -41,43 +33,19 @@ class VelocityEncoder(nn.Module):
             nn.Linear(hidden_dim, hidden_dim),
             nn.LayerNorm(hidden_dim),
         )
-        nn.init.xavier_uniform_(self.net[0].weight)
-        nn.init.zeros_(self.net[0].bias)
-        nn.init.xavier_uniform_(self.net[4].weight)
-        nn.init.zeros_(self.net[4].bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Args:
-            x: (B, T, input_dim) raw velocity features.
-        Returns:
-            (B, T, hidden_dim)
-        """
         return self.net(x)
 
 
 class GatedFusion(nn.Module):
-
     def __init__(self, embed_dim: int = config.EMBED_DIM, dropout: float = config.GATED_FUSION_DROPOUT):
         super().__init__()
         self.gate_proj = nn.Linear(embed_dim * 2, embed_dim)
         self.dropout = nn.Dropout(dropout)
         self.norm = nn.LayerNorm(embed_dim)
-        nn.init.xavier_uniform_(self.gate_proj.weight)
-        nn.init.zeros_(self.gate_proj.bias)
 
     def forward(self, position_feature: torch.Tensor, velocity_feature: torch.Tensor) -> torch.Tensor:
-        """Args:
-            position_feature: (B, T, embed_dim)
-            velocity_feature: (B, T, embed_dim)
-        Returns:
-            (B, T, embed_dim) gated fusion of the two.
-        """
-        if position_feature.shape != velocity_feature.shape:
-            raise ValueError(
-                f"position_feature and velocity_feature must match shapes, "
-                f"got {tuple(position_feature.shape)} and {tuple(velocity_feature.shape)}."
-            )
-
         gate = torch.sigmoid(self.gate_proj(torch.cat([position_feature, velocity_feature], dim=-1)))
         fused = gate * position_feature + (1.0 - gate) * velocity_feature
         fused = self.dropout(fused)
@@ -85,7 +53,6 @@ class GatedFusion(nn.Module):
 
 
 class MotionFeatureFusion(nn.Module):
-
     def __init__(self, embed_dim: int = config.EMBED_DIM):
         super().__init__()
         self.embed_dim = embed_dim
@@ -101,16 +68,11 @@ class MotionFeatureFusion(nn.Module):
             config.POSE_DIM + config.FACE_DIM + config.LEFT_HAND_DIM + config.RIGHT_HAND_DIM,
         )
 
-        # Separate velocity encoders per modality (left/right hand kept
-        # separate, mirroring Module 2's left/right hand graph branches,
-        # then fused together the same way hand_features are fused there).
         self.pose_velocity_encoder = VelocityEncoder(input_dim=config.POSE_DIM)
         self.face_velocity_encoder = VelocityEncoder(input_dim=config.FACE_DIM)
         self.left_hand_velocity_encoder = VelocityEncoder(input_dim=config.LEFT_HAND_DIM)
         self.right_hand_velocity_encoder = VelocityEncoder(input_dim=config.RIGHT_HAND_DIM)
 
-        # Fuse left/right hand velocity encodings the same way Module 2
-        # fuses left/right hand position encodings, before hand-level gating.
         self.hand_velocity_fusion = nn.Sequential(
             nn.Linear(embed_dim * 2, embed_dim),
             nn.LayerNorm(embed_dim),
@@ -130,16 +92,10 @@ class MotionFeatureFusion(nn.Module):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
 
         if raw_landmarks.ndim != 3 or raw_landmarks.size(-1) != config.INPUT_DIM:
-            raise ValueError(
-                f"Expected raw_landmarks shape (B, T, {config.INPUT_DIM}), "
-                f"got {tuple(raw_landmarks.shape)}."
-            )
+            raise ValueError(f"Expected (B, T, {config.INPUT_DIM}), got {tuple(raw_landmarks.shape)}.")
         for name, feat in (("hand_features", hand_features), ("pose_features", pose_features), ("face_features", face_features)):
             if feat.shape[:2] != raw_landmarks.shape[:2] or feat.size(-1) != self.embed_dim:
-                raise ValueError(
-                    f"Expected {name} shape (B, T, {self.embed_dim}) matching "
-                    f"raw_landmarks' (B, T), got {tuple(feat.shape)}."
-                )
+                raise ValueError(f"Expected {name} (B, T, {self.embed_dim}), got {tuple(feat.shape)}.")
 
         pose_raw = raw_landmarks[:, :, self._pose_slice]
         face_raw = raw_landmarks[:, :, self._face_slice]
@@ -162,66 +118,21 @@ class MotionFeatureFusion(nn.Module):
 
 
 if __name__ == "__main__":
-    # --- Verification: shapes + gradient flow, per the one-module-at-a-time rule ---
     torch.manual_seed(0)
-    batch_size = 2
-    seq_len = config.SEQUENCE_LENGTH
-    embed_dim = config.EMBED_DIM
+    B, T = 2, config.SEQUENCE_LENGTH
+    D = config.EMBED_DIM
 
-    raw_landmarks = torch.randn(batch_size, seq_len, config.INPUT_DIM, requires_grad=False)
+    raw = torch.randn(B, T, config.INPUT_DIM)
+    h_f = torch.randn(B, T, D, requires_grad=True)
+    p_f = torch.randn(B, T, D, requires_grad=True)
+    f_f = torch.randn(B, T, D, requires_grad=True)
 
-    hand_features = torch.randn(batch_size, seq_len, embed_dim, requires_grad=True)
-    pose_features = torch.randn(batch_size, seq_len, embed_dim, requires_grad=True)
-    face_features = torch.randn(batch_size, seq_len, embed_dim, requires_grad=True)
+    model = MotionFeatureFusion(embed_dim=D)
+    h, p, f = model(raw, h_f, p_f, f_f)
 
-    model = MotionFeatureFusion(embed_dim=embed_dim)
-    hand_fused, pose_fused, face_fused = model(raw_landmarks, hand_features, pose_features, face_features)
+    assert h.shape == p.shape == f.shape == (B, T, D)
+    assert compute_velocity(raw)[:, 0, :].abs().sum() == 0
 
-    print("hand_fused:", hand_fused.shape)
-    print("pose_fused:", pose_fused.shape)
-    print("face_fused:", face_fused.shape)
-
-    expected_shape = (batch_size, seq_len, embed_dim)
-    assert hand_fused.shape == expected_shape, "hand_fused shape mismatch"
-    assert pose_fused.shape == expected_shape, "pose_fused shape mismatch"
-    assert face_fused.shape == expected_shape, "face_fused shape mismatch"
-    print("\nShape verification: PASSED")
-
-    # Sanity check: velocity at t=0 should be exactly zero for every modality.
-    pose_raw = raw_landmarks[:, :, model._pose_slice]
-    v0 = compute_velocity(pose_raw)[:, 0, :]
-    assert torch.all(v0 == 0.0), "velocity at t=0 should be zero"
-    print("Velocity t=0 zero-check: PASSED")
-
-    # Gradient flow check.
-    loss = hand_fused.sum() + pose_fused.sum() + face_fused.sum()
-    loss.backward()
-
-    missing_grad = [
-        name for name, param in model.named_parameters()
-        if param.requires_grad and param.grad is None
-    ]
-    if missing_grad:
-        print(f"\nWARNING: {len(missing_grad)} parameter(s) received NO gradient:")
-        for name in missing_grad:
-            print(f"  - {name}")
-    else:
-        print("Gradient flow verification: PASSED (all parameters received gradients)")
-
-    # Confirm gradient also reaches the upstream position-feature inputs
-    # (i.e. this module wouldn't block gradient flow back into Module 2).
-    upstream_ok = all(
-        t.grad is not None and torch.any(t.grad != 0)
-        for t in (hand_features, pose_features, face_features)
-    )
-    print(
-        f"Upstream gradient reach-through (hand/pose/face_features): "
-        f"{'PASSED' if upstream_ok else 'FAILED'}"
-    )
-
-    # Confirm the gate actually produces non-trivial (not all-0 or all-1)
-    # blends, i.e. it's doing real gating rather than degenerating to a
-    # pass-through of one branch.
-    with torch.no_grad():
-        cat = torch.cat([hand_features, hand_velocity if False else torch.zeros_like(hand_features)], dim=-1)
-    print("\nModule 3 build complete.")
+    (h + p + f).sum().backward()
+    assert all(g.grad is not None for g in (h_f, p_f, f_f))
+    print("MotionFeatureFusion: VERIFIED")

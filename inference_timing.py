@@ -7,36 +7,29 @@ from pathlib import Path
 import numpy as np
 import torch
 
-V1_ROOT = Path("C:\\Users\\manab\\OneDrive\\Desktop\\internproject")
-V2_ROOT = Path(__file__).parent
-
-WARMUP_RUNS = 10
-TIMED_RUNS = 100
-INFERENCE_TIME_TARGET_SECONDS = 0.05  # 50ms per sample
+ROOT = Path(__file__).parent
 
 
 def time_forward_passes(
-    model: torch.nn.Module, dummy_input: torch.Tensor, device: torch.device, model_name: str,
+    model: torch.nn.Module, dummy_input: torch.Tensor, device: torch.device,
 ) -> dict:
     model = model.to(device)
     model.eval()
     dummy_input = dummy_input.to(device)
 
-    is_cuda = device.type == "cuda"
-
     with torch.no_grad():
         for _ in range(WARMUP_RUNS):
             _ = model(dummy_input)
-        if is_cuda:
+        if device.type == "cuda":
             torch.cuda.synchronize()
 
         timings = []
         for _ in range(TIMED_RUNS):
-            if is_cuda:
+            if device.type == "cuda":
                 torch.cuda.synchronize()
             start = time.perf_counter()
             _ = model(dummy_input)
-            if is_cuda:
+            if device.type == "cuda":
                 torch.cuda.synchronize()
             end = time.perf_counter()
             timings.append(end - start)
@@ -44,87 +37,62 @@ def time_forward_passes(
     timings = np.array(timings)
     return {
         "device": str(device),
-        "mean_seconds": float(timings.mean()),
-        "std_seconds": float(timings.std()),
-        "min_seconds": float(timings.min()),
-        "max_seconds": float(timings.max()),
         "mean_ms": float(timings.mean() * 1000),
+        "std_ms": float(timings.std() * 1000),
+        "min_ms": float(timings.min() * 1000),
+        "max_ms": float(timings.max() * 1000),
     }
 
 
-def print_timing_result(model_name: str, result: dict) -> None:
-    print(f"\n{model_name} on {result['device']}:")
-    print(f"  Mean latency : {result['mean_ms']:.2f} ms  (± {result['std_seconds']*1000:.2f} ms std)")
-    print(f"  Min / Max    : {result['min_seconds']*1000:.2f} ms / {result['max_seconds']*1000:.2f} ms")
-    meets_target = result["mean_seconds"] < INFERENCE_TIME_TARGET_SECONDS
-    print(
-        f"  Meets <{INFERENCE_TIME_TARGET_SECONDS:.0f}s target: "
-        f"{'YES' if meets_target else 'NO'} "
-        f"({result['mean_seconds']:.6f}s per sample)"
-    )
-
-
 def main() -> None:
+    sys.path.insert(0, str(ROOT))
+    import config as v2_config
+    from model.medicalsignformer import MedicalSignFormerV2
+
+    model = MedicalSignFormerV2(
+        embed_dim=v2_config.EMBED_DIM,
+        num_classes=v2_config.NUM_CLASSES,
+        sequence_length=v2_config.SEQUENCE_LENGTH,
+    )
+    dummy_input = torch.randn(1, v2_config.SEQUENCE_LENGTH, v2_config.INPUT_DIM)
+
     devices = [torch.device("cpu")]
     if torch.cuda.is_available():
         devices.append(torch.device("cuda"))
-    else:
-        print("CUDA not available in this environment - timing CPU only.\n")
 
-    sys.path.insert(0, str(V1_ROOT))
-    import config as v1_config
-    from model.medicalsignformer import MedicalSignFormer
-    v1_model = MedicalSignFormer(
-        num_classes=v1_config.NUM_CLASSES, sequence_length=v1_config.SEQUENCE_LENGTH, embed_dim=v1_config.EMBED_DIM,
-    )
-    v1_dummy = torch.randn(1, v1_config.SEQUENCE_LENGTH, v1_config.INPUT_DIM)
-
-    for mod_name in list(sys.modules):
-        if mod_name in ("config",) or mod_name.startswith("models") or mod_name.startswith("model"):
-            del sys.modules[mod_name]
-    sys.path.remove(str(V1_ROOT))
-    sys.path.insert(0, str(V2_ROOT))
-
-    import config as v2_config
-    from model.medicalsignformer import MedicalSignFormerV2
-    v2_model = MedicalSignFormerV2(
-        embed_dim=v2_config.EMBED_DIM, num_classes=v2_config.NUM_CLASSES, sequence_length=v2_config.SEQUENCE_LENGTH,
-    )
-    v2_dummy = torch.randn(1, v2_config.SEQUENCE_LENGTH, v2_config.INPUT_DIM)
-
-    print("=" * 70)
-    print(f"INFERENCE TIMING ({WARMUP_RUNS} warmup + {TIMED_RUNS} timed single-sample passes each)")
-    print("=" * 70)
-
-    results = {}
-    for device in devices:
-        results[("v1", device.type)] = time_forward_passes(v1_model, v1_dummy, device, "v1")
-        results[("v2", device.type)] = time_forward_passes(v2_model, v2_dummy, device, "v2")
+    print("=" * 60)
+    print(f"INFERENCE TIMING — MedicalSignFormerV2")
+    print(f"({WARMUP_RUNS} warmup + {TIMED_RUNS} timed passes)")
+    print("=" * 60)
 
     for device in devices:
-        print(f"\n--- {device.type.upper()} ---")
-        print_timing_result("v1 (MedicalSignFormer)", results[("v1", device.type)])
-        print_timing_result("v2 (MedicalSignFormerV2)", results[("v2", device.type)])
-
-        v1_ms = results[("v1", device.type)]["mean_ms"]
-        v2_ms = results[("v2", device.type)]["mean_ms"]
-        ratio = v2_ms / v1_ms
-        print(f"\n  v2 is {ratio:.2f}x {'slower' if ratio > 1 else 'faster'} than v1 on {device.type.upper()}.")
+        result = time_forward_passes(model, dummy_input, device)
+        print(f"\n  Device : {result['device']}")
+        print(f"  Mean   : {result['mean_ms']:.2f} ms  (+/- {result['std_ms']:.2f} ms)")
+        print(f"  Min    : {result['min_ms']:.2f} ms")
+        print(f"  Max    : {result['max_ms']:.2f} ms")
+        meets = "YES" if result["mean_ms"] < INFERENCE_TARGET_MS else "NO"
+        print(f"  < {INFERENCE_TARGET_MS}ms target: {meets}")
 
     if torch.cuda.is_available():
         try:
             from model.mamba_encoder import USING_OFFICIAL_MAMBA
-            print(
-                f"\nNOTE: v2's Mamba encoder is using "
-                f"{'the OFFICIAL CUDA-fused mamba_ssm package' if USING_OFFICIAL_MAMBA else 'the pure-PyTorch fallback (_SelectiveSSM)'}. "
-                + ("" if USING_OFFICIAL_MAMBA else
-                   "The fallback's sequential Python scan loop is meaningfully slower than the official "
-                   "fused kernel would be - if mamba_ssm becomes installable on your setup, v2's GPU "
-                   "timing above would likely improve.")
+            note = (
+                "Mamba: OFFICIAL CUDA-fused mamba_ssm package."
+                if USING_OFFICIAL_MAMBA
+                else (
+                    "Mamba: pure-PyTorch fallback (_SelectiveSSM) — sequential scan "
+                    "loop is slower than the official fused kernel."
+                )
             )
+            print(f"\n  NOTE: {note}")
         except ImportError:
             pass
 
+
+WARMUP_RUNS = 10
+TIMED_RUNS = 100
+INFERENCE_TARGET_MS = 50.0
 
 if __name__ == "__main__":
     main()

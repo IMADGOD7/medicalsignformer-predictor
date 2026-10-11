@@ -1,249 +1,253 @@
 from __future__ import annotations
 
 import logging
-import sys
+import threading
 import time
+from dataclasses import dataclass, field
+from queue import Empty, Queue
 from typing import Optional
 
 import cv2
 import numpy as np
 
-from inference import InferenceEngine
+from gesture_segmenter import GestureConfig, GestureSegmenter, GestureState
+from inference import InferenceEngine, InferenceResult
 from mediapipe_detector import MediaPipeDetector, MediaPipeDetectorError
-from postprocess import TemporalSmoother
-from sliding_window import SlidingWindow, SlidingWindowError
-from ui import DisplayWindow, OverlayConfig, draw_overlay
+from postprocess import SmoothedResult, TemporalSmoother
+from resampler import resample_gesture
+from ui import DisplayWindow, draw_overlay
 from webcam import Webcam, WebcamError
 
 logger = logging.getLogger(__name__)
 
-# Number of consecutive empty frames before resetting temporal smoother
-EMPTY_FRAME_RESET_THRESHOLD = 10
+EMPTY_FRAME_RESET_THRESHOLD = 30
+
+
+@dataclass
+class DeploymentConfig:
+    """All tunable parameters in one place."""
+
+    gesture: GestureConfig = field(default_factory=lambda: GestureConfig(
+        motion_threshold=0.005,
+        motion_smoothing_alpha=0.15,
+        min_gesture_frames=10,
+        max_gesture_frames=120,
+        end_timeout_frames=10,
+        cooldown_frames=10,
+        target_sequence_length=100,
+    ))
+    smoother_window: int = 10
+    smoother_agreement: float = 0.6
+    confidence_threshold: float = 0.5
+    mediapipe_max_loss_frames: int = 15
+    frame_queue_size: int = 4
 
 
 def configure_logging() -> None:
-    """Configures system-wide logging format and log level."""
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[logging.StreamHandler(sys.stdout)],
+        handlers=[logging.StreamHandler()],
     )
 
 
-def log_startup_summary(engine: InferenceEngine, window_length: int) -> None:
-    """Logs system startup specifications and model metadata."""
-    device = getattr(engine, "device", "CUDA")
-    input_dim = getattr(engine, "input_dim", 1629)
-    num_classes = getattr(engine, "num_classes", 48)
-    checkpoint = getattr(engine, "model_path", "best_finetuned_model.pth")
+def log_startup_summary(engine: InferenceEngine, config: DeploymentConfig) -> None:
+    logger.info("=" * 55)
+    logger.info("  MedicalSignFormer Gesture Deployment")
+    logger.info("=" * 55)
+    logger.info("  Device:              %s", engine.device)
+    logger.info("  Sequence length:     %d", config.gesture.target_sequence_length)
+    logger.info("  Input dim:           %d", engine._expected_shape[1])
+    logger.info("  Classes:             %d", engine.label_names.__len__())
+    logger.info("  Smoothing window:    %d", config.smoother_window)
+    logger.info("  Smoothing agreement: %.2f", config.smoother_agreement)
+    logger.info("  Confidence threshold:%.2f", config.confidence_threshold)
+    logger.info("  Motion threshold:    %.4f", config.gesture.motion_threshold)
+    logger.info("  Min gesture frames:  %d", config.gesture.min_gesture_frames)
+    logger.info("  Max gesture frames:  %d", config.gesture.max_gesture_frames)
+    logger.info("=" * 55)
 
-    logger.info("==================================================")
-    logger.info("           MedicalSignFormerV2 Startup            ")
-    logger.info("==================================================")
-    logger.info(" Device:           %s", device)
-    logger.info(" Sequence Length:  %d", window_length)
-    logger.info(" Input Dimension:  %d", input_dim)
-    logger.info(" Classes:          %d", num_classes)
-    logger.info(" Checkpoint:       %s", checkpoint)
-    logger.info("==================================================")
 
+class MediaPipeWorker:
+    """Runs MediaPipe in a background thread so the main loop stays free
+    for model inference and UI rendering."""
 
-def _draw_warmup_overlay(
-    frame: np.ndarray,
-    current_frames: int,
-    total_frames: int,
-    fps: Optional[float] = None,
-    proc_time_ms: Optional[float] = None,
-    config: OverlayConfig = OverlayConfig(),
-) -> np.ndarray:
-    """Draws warm-up state overlay showing frame count and percentage progress."""
-    x = config.margin
-    y = config.margin
+    def __init__(self, max_loss_frames: int = 15, queue_size: int = 4):
+        self._detector: Optional[MediaPipeDetector] = None
+        self._max_loss_frames = max_loss_frames
+        self._input_queue: Queue = Queue(maxsize=queue_size)
+        self._output_queue: Queue = Queue(maxsize=queue_size)
+        self._thread: Optional[threading.Thread] = None
+        self._stop = threading.Event()
+        self._frame_count = 0
+        self._empty_streak = 0
 
-    pct = int((current_frames / total_frames) * 100) if total_frames > 0 else 0
-    line1 = "Collecting Frames..."
-    line2 = f"{current_frames} / {total_frames} ({pct}%)"
+    def start(self) -> None:
+        self._detector = MediaPipeDetector()
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
 
-    # Line 1: Header
-    (w1, h1), b1 = cv2.getTextSize(
-        line1, config.font, config.main_scale, config.main_thickness
-    )
-    y += h1
-    cv2.rectangle(
-        frame,
-        (x - 6, y - h1 - 6),
-        (x + w1 + 6, y + b1 + 6),
-        (0, 0, 0),
-        thickness=-1,
-    )
-    cv2.putText(
-        frame,
-        line1,
-        (x, y),
-        config.font,
-        config.main_scale,
-        (0, 200, 255),
-        config.main_thickness,
-        cv2.LINE_AA,
-    )
-    y += b1 + config.line_gap
+    def _run(self) -> None:
+        while not self._stop.is_set():
+            try:
+                frame_rgb = self._input_queue.get(timeout=0.05)
+            except Empty:
+                continue
+            try:
+                features = self._detector.process(frame_rgb)
+            except (MediaPipeDetectorError, ValueError, cv2.error):
+                features = np.zeros(1629, dtype=np.float32)
+            self._frame_count += 1
+            if np.count_nonzero(features) == 0:
+                self._empty_streak += 1
+            else:
+                self._empty_streak = 0
+            try:
+                self._output_queue.put_nowait(features)
+            except Exception:
+                pass  # drop frame if consumer is behind
 
-    # Line 2: Progress string "37 / 100 (37%)"
-    (w2, h2), b2 = cv2.getTextSize(
-        line2, config.font, config.main_scale, config.main_thickness
-    )
-    y += h2
-    cv2.rectangle(
-        frame,
-        (x - 6, y - h2 - 6),
-        (x + w2 + 6, y + b2 + 6),
-        (0, 0, 0),
-        thickness=-1,
-    )
-    cv2.putText(
-        frame,
-        line2,
-        (x, y),
-        config.font,
-        config.main_scale,
-        (0, 200, 255),
-        config.main_thickness,
-        cv2.LINE_AA,
-    )
+    def submit(self, frame_rgb: np.ndarray) -> None:
+        try:
+            self._input_queue.put_nowait(frame_rgb)
+        except Exception:
+            pass  # drop frame if worker is behind
 
-    # Top-right Debug Metrics: FPS and processing latency
-    if fps is not None:
-        metrics_text = f"{fps:.1f} FPS"
-        if proc_time_ms is not None:
-            metrics_text += f" | {proc_time_ms:.1f} ms"
+    def get_features(self) -> Optional[np.ndarray]:
+        try:
+            return self._output_queue.get_nowait()
+        except Empty:
+            return None
 
-        (fps_w, fps_h), fps_b = cv2.getTextSize(
-            metrics_text, config.font, config.debug_scale, config.debug_thickness
-        )
-        fps_x = frame.shape[1] - fps_w - config.margin
-        fps_y = config.margin + fps_h
-        cv2.rectangle(
-            frame,
-            (fps_x - 4, fps_y - fps_h - 4),
-            (fps_x + fps_w + 4, fps_y + fps_b + 4),
-            (0, 0, 0),
-            thickness=-1,
-        )
-        cv2.putText(
-            frame,
-            metrics_text,
-            (fps_x, fps_y),
-            config.font,
-            config.debug_scale,
-            (255, 255, 255),
-            config.debug_thickness,
-            cv2.LINE_AA,
-        )
+    def tracking_lost(self) -> bool:
+        return self._empty_streak >= self._max_loss_frames
 
-    return frame
+    def stop(self) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=2.0)
+        if self._detector is not None:
+            self._detector.close()
 
 
 def main() -> None:
-    """Main application loop executing live webcam recognition."""
     configure_logging()
-    logger.info("Starting MedicalSignFormerV2 deployment application...")
+    deploy_config = DeploymentConfig()
+
+    gesture_config = deploy_config.gesture
+    smoother = TemporalSmoother(
+        window_size=deploy_config.smoother_window,
+        min_agreement_ratio=deploy_config.smoother_agreement,
+        confidence_threshold=deploy_config.confidence_threshold,
+    )
+    segmenter = GestureSegmenter(gesture_config)
 
     try:
         with (
             Webcam() as webcam,
-            MediaPipeDetector() as detector,
             InferenceEngine() as engine,
             DisplayWindow() as window,
         ):
-            sliding_window = SlidingWindow()
-            smoother = TemporalSmoother()
-
-            # Point 3: Log startup configuration summary
-            log_startup_summary(engine, sliding_window.sequence_length)
+            mp_worker = MediaPipeWorker(
+                max_loss_frames=deploy_config.mediapipe_max_loss_frames,
+                queue_size=deploy_config.frame_queue_size,
+            )
+            mp_worker.start()
+            log_startup_summary(engine, deploy_config)
 
             fps_ema: Optional[float] = None
-            proc_time_ms: Optional[float] = None
-            alpha = 0.1  # EMA smoothing factor for FPS tracking
+            alpha = 0.1
             empty_frame_counter = 0
+            latest_raw: Optional[InferenceResult] = None
+            latest_smoothed: Optional[SmoothedResult] = None
+            gesture_active = False  # True while a gesture is being recorded/processed
 
-            for frame_rgb in webcam.frames():
-                # Point 2: True end-to-end loop timing start
+            for frame_bgr in webcam.frames():
                 loop_start = time.perf_counter()
 
-                # Point 1: Fault-tolerant landmark extraction
-                try:
-                    features = detector.process(frame_rgb)
-                except (MediaPipeDetectorError, ValueError, cv2.error) as e:
-                    logger.warning("Landmark extraction failed on frame: %s", e)
-                    continue
+                frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+                mp_worker.submit(frame_rgb)
+                features = mp_worker.get_features()
 
-                # Point 7: Auto-reset smoother when hands/landmarks are lost continuously
-                if np.all(features == 0):
+                if features is None:
                     empty_frame_counter += 1
-                    if empty_frame_counter == EMPTY_FRAME_RESET_THRESHOLD:
+                    if empty_frame_counter >= EMPTY_FRAME_RESET_THRESHOLD:
                         smoother.reset()
-                else:
-                    empty_frame_counter = 0
+                        segmenter.reset()
+                        latest_raw = None
+                        latest_smoothed = None
+                        gesture_active = False
+                    continue
+                empty_frame_counter = 0
 
-                # Append feature vector to buffer
-                sliding_window.add_frame(features)
+                if mp_worker.tracking_lost():
+                    smoother.reset()
+                    segmenter.reset()
+                    latest_raw = None
+                    latest_smoothed = None
+                    gesture_active = False
 
-                # Point 4: Warm-up state handling with updated UI feedback
-                if not sliding_window.is_ready():
-                    _draw_warmup_overlay(
-                        frame_rgb,
-                        len(sliding_window),
-                        sliding_window.sequence_length,
-                        fps=fps_ema,
-                        proc_time_ms=proc_time_ms,
+                # Process frame through FSM
+                state, completed_gesture = segmenter.process_frame(features)
+
+                # Run inference on completed gesture
+                if completed_gesture is not None:
+                    raw_frames = completed_gesture.shape[0]
+                    logger.info("Gesture captured (%d frames). Resampling to %d...",
+                                raw_frames, gesture_config.target_sequence_length)
+
+                    resampled = resample_gesture(
+                        completed_gesture,
+                        target_length=gesture_config.target_sequence_length,
                     )
-                    frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-                    key = window.show(frame_bgr)
-                    if window.should_quit(key):
-                        logger.info("Quit key pressed during warm-up phase.")
-                        break
+                    try:
+                        latest_raw = engine.predict(resampled)
+                        latest_smoothed = smoother.update(latest_raw)
+                        gesture_active = False  # gesture done, now showing result
 
-                    loop_end = time.perf_counter()
-                    delta = loop_end - loop_start
-                    if delta > 0:
-                        instant_fps = 1.0 / delta
-                        fps_ema = (
-                            instant_fps
-                            if fps_ema is None
-                            else (alpha * instant_fps + (1.0 - alpha) * fps_ema)
+                        logger.info(
+                            "Prediction -> %s | %.1f%% | %.1fms",
+                            latest_raw.predicted_label,
+                            latest_raw.confidence * 100.0,
+                            latest_raw.latency_ms,
                         )
-                        proc_time_ms = delta * 1000.0
-                    continue
+                    except RuntimeError as e:
+                        logger.warning("Inference failed: %s", e)
+                        latest_raw = None
+                        latest_smoothed = None
+                        gesture_active = False
 
-                # Point 5: Direct extraction (guaranteed non-None by is_ready check)
-                window_data = sliding_window.get_window()
+                # Mark gesture as active if we're recording
+                if state == GestureState.RECORDING:
+                    gesture_active = True
+                    # Clear stale predictions from a previous gesture
+                    if latest_raw is not None and latest_smoothed is not None:
+                        latest_raw = None
+                        latest_smoothed = None
 
-                try:
-                    raw_result = engine.predict(window_data)
-                except RuntimeError as e:
-                    logger.warning("Inference failed: %s", e)
-                    continue
+                # Build display data — hide stale predictions during active recording
+                display_smoothed = latest_smoothed if not gesture_active else None
+                display_raw = latest_raw if not gesture_active else None
 
-                smoothed = smoother.update(raw_result)
-
-                # Point 8: Draw overlay with live FPS and frame latency
                 draw_overlay(
                     frame_rgb,
-                    smoothed=smoothed,
-                    raw=raw_result,
+                    smoothed=display_smoothed,
+                    raw=display_raw,
                     fps=fps_ema,
+                    gesture_state=state.name,
+                    recorded_frames=segmenter.buffer_length,
+                    motion_score=segmenter.last_motion_score,
+                    motion_threshold=gesture_config.motion_threshold,
                     copy=False,
                 )
 
                 frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
                 key = window.show(frame_bgr)
                 if window.should_quit(key):
-                    logger.info("Quit command ('q' or ESC) received from user.")
+                    logger.info("Quit requested.")
                     break
 
-                # Points 2 & 8: Compute end-to-end loop latency and FPS
-                loop_end = time.perf_counter()
-                delta = loop_end - loop_start
+                delta = time.perf_counter() - loop_start
                 if delta > 0:
                     instant_fps = 1.0 / delta
                     fps_ema = (
@@ -251,28 +255,19 @@ def main() -> None:
                         if fps_ema is None
                         else (alpha * instant_fps + (1.0 - alpha) * fps_ema)
                     )
-                    proc_time_ms = delta * 1000.0
 
     except WebcamError as e:
-        logger.error("Webcam hardware error: %s", e)
-
+        logger.error("Webcam error: %s", e)
     except MediaPipeDetectorError as e:
-        logger.error("MediaPipe detector initialization error: %s", e)
-
-    except SlidingWindowError as e:
-        logger.error("Sliding window buffer error: %s", e)
-
+        logger.error("MediaPipe error: %s", e)
     except (FileNotFoundError, RuntimeError, ValueError) as e:
-        logger.error("Application runtime error: %s", e)
-
+        logger.error("Runtime error: %s", e)
     except KeyboardInterrupt:
-        logger.info("KeyboardInterrupt caught. Initiating graceful shutdown...")
-
+        logger.info("Interrupted.")
     except Exception:
-        logger.exception("Unexpected system exception.")
-
+        logger.exception("Unexpected error.")
     finally:
-        logger.info("Application shutdown completed cleanly. All resources released.")
+        logger.info("Shutdown complete.")
 
 
 if __name__ == "__main__":
