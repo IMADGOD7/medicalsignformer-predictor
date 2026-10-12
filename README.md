@@ -70,7 +70,7 @@ Monte Carlo Dropout
 # Project Structure
 
 ```
-MedicalSignFormer/
+medicalsignformer-predictor/
 │
 ├── data/
 │   └── processed/
@@ -106,7 +106,7 @@ MedicalSignFormer/
 ```bash
 git clone https://github.com/IMADGOD7/medicalsignformer-predictor.git
 
-cd MedicalSignFormer
+cd medicalsignformer-predictor
 ```
 
 ---
@@ -157,17 +157,14 @@ Each processed sample consists of
 Sequence Length × 1629
 ```
 
-where
+where 1,629 features correspond to 543 MediaPipe landmarks across 3 spatial coordinates (x, y, z):
 
 ```
-1629 =
-468 Face Landmarks
-+
-33 Pose Landmarks
-+
-21 Left Hand Landmarks
-+
-21 Right Hand Landmarks
+1629 features = 543 landmarks × 3 coordinates (x, y, z)
+  = (468 Face Landmarks
+   + 33 Pose Landmarks
+   + 21 Left Hand Landmarks
+   + 21 Right Hand Landmarks) × 3
 ```
 
 All sequences are normalized to the same temporal length before training.
@@ -302,13 +299,15 @@ Git, so distribute it separately and only where you have permission to share it.
 
 # Evaluation Notes
 
-The checked-in main test report records 95.56% accuracy and 0.951 macro-F1 on
-1,396 samples. The active train, validation, and test CSVs share signers, so this
-result does not establish performance on unseen signers. Separate mapped
-MSL/Kaggle evaluation artifacts report about 9–11% accuracy on 76 samples; treat
-these as cross-dataset results, not as comparable to the main test score.
-Performance varies by class. This project is a research prototype, not a medical
-diagnostic system.
+- **Main Test Performance:** The baseline evaluation report records **95.56% accuracy** and **0.951 macro-F1** on a 1,396-sample test split (evaluated locally under `evaluation/classification_report.csv`).
+- **Active Dataset Partitions:** The current active processed dataset (`data/processed/`) contains 6,979 total landmark samples across 48 sign vocabulary classes, partitioned into:
+  - **Train:** 5,583 samples (80%)
+  - **Validation:** 698 samples (10%)
+  - **Test:** 698 samples (10%)
+- **Signer Overlap:** All 18 signers appear across training, validation, and test splits. Therefore, this split evaluates gesture recognition across known signers and does not establish performance on unseen signers.
+- **Cross-Dataset Generalization:** External evaluation on the mapped MSL/Kaggle dataset (`evaluation_kaggle/`) yields ~9–11% accuracy on 76 samples due to domain shifts and semantic label differences.
+- **Artifact Tracking:** Model weights (`.pth`), extracted landmark arrays (`.npy`), and evaluation reports (`evaluation/*.csv`) are ignored by Git via `.gitignore` to keep the repository lightweight. Checkpoints must be generated or provided locally.
+- **Medical Disclaimer:** This project is a research prototype for sign vocabulary classification, not a clinical medical diagnostic system.
 
 ---
 
@@ -352,8 +351,10 @@ pretrained_encoder.pth
 ```
 checkpoints/
 
-best_finetuned_model.pth
+best_model.pth
 ```
+
+*(Note: scripts standardize on `best_model.pth`; standalone profiling or analysis scripts may also look for `best_finetuned_model.pth`)*
 
 ---
 
